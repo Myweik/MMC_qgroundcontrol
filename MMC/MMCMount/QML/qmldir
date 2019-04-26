@@ -1,0 +1,14 @@
+﻿Module QGroundControl.MMCMounts
+
+MMCMountControls      	1.0     MMCMountControls.qml
+MMCMountSetting       	1.0     MMCMountSetting.qml
+MMCMountControl       	1.0     MMCMountControl.qml
+MMCMountOperation     	1.0     MMCMountOperation.qml
+MMCCloudTerrace	      	1.0	MMCCloudTerrace.qml
+MMCDropMount		1.0     MMCDropMount.qml
+MMCGasMount		1.0     MMCGasMount.qml
+MMCLightMount         	1.0     MMCLightMount.qml
+MMCSpeakMount         	1.0     MMCSpeakMount.qml
+MMCCamera3dmapMount   	1.0     MMCCamera3dmapMount.qml
+
+MountControlArea   	1.0     MountControlArea.qml

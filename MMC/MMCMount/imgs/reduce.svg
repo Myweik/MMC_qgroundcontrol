@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>减</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-8.2%" y="-2.4%" width="116.4%" height="107.4%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <path d="M24,17.3333333 L17.3333333,17.3333333 L14.6666667,17.3333333 L8,17.3333333 C7.26666667,17.3333333 6.66666667,16.7333333 6.66666667,16 C6.66666667,15.2666667 7.26666667,14.6666667 8,14.6666667 L14.6666667,14.6666667 L17.3333333,14.6666667 L24,14.6666667 C24.7333333,14.6666667 25.3333333,15.2666667 25.3333333,16 C25.3333333,16.7333333 24.7333333,17.3333333 24,17.3333333 Z" id="path-2"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-Copy-3" transform="translate(-827.000000, -223.000000)">
+            <g id="挂载-copy-9" filter="url(#filter-1)" transform="translate(735.000000, 90.000000)">
+                <g id="Group-4" transform="translate(10.000000, 133.000000)">
+                    <g id="Group-6" transform="translate(30.000000, 0.000000)">
+                        <g id="Group-14" transform="translate(52.000000, 0.000000)">
+                            <g id="Icon-/-Sub-/-Rounded">
+                                <mask id="mask-3" fill="white">
+                                    <use xlink:href="#path-2"></use>
+                                </mask>
+                                <use id="Mask" fill="#9BACBE" fill-rule="nonzero" xlink:href="#path-2"></use>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

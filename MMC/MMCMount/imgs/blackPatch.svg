@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="18px" viewBox="0 0 25 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>Rectangle 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-8.2%" y="-1.9%" width="116.4%" height="105.9%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <linearGradient x1="6.18285616%" y1="50%" x2="100%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#606260" offset="0%"></stop>
+            <stop stop-color="#585D57" offset="40.568132%"></stop>
+            <stop stop-color="#363935" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-Copy-4" transform="translate(-1259.000000, -140.000000)" fill="url(#linearGradient-2)" fill-rule="nonzero" stroke="#403E3E" stroke-width="0.5">
+            <g id="挂载-copy-7" filter="url(#filter-1)" transform="translate(1205.000000, 90.000000)">
+                <g id="Group-11" transform="translate(54.000000, 50.000000)">
+                    <rect id="Rectangle-3" x="0.25" y="0.25" width="24.5" height="17.5" rx="4"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

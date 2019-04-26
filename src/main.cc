@@ -50,6 +50,8 @@
 #include <iostream>
 #include "QGCMapEngine.h"
 
+#include "MMC/mmcplugin.h"
+
 /* SDL does ugly things to main() */
 #ifdef main
 #undef main
@@ -241,6 +243,8 @@ int main(int argc, char *argv[])
     // while we only have the main thread. That should prevent it from hitting the race condition later
     // on in the code.
     qRegisterMetaType<QList<QPair<QByteArray,QByteArray> > >();
+
+    mmcRegisterPlugin();
 
     app->_initCommon();
     //-- Initialize Cache System

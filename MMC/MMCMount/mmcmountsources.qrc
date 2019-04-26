@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/mmcmountqml">
+        <file alias="MountControlArea.qml">QML/MountControlArea.qml</file>
+        <file>QML/qmldir</file>
+    </qresource>
+</RCC>

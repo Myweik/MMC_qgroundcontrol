@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>收起</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-8.2%" y="-2.4%" width="116.4%" height="107.4%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <path d="M15.875,12.9999928 C16.265,12.6099928 16.905,12.6199928 17.295,12.9999928 C17.685,13.3899928 17.685,14.0199928 17.295,14.4099928 L12.705,18.9999928 C12.315,19.3899928 11.685,19.3899928 11.295,18.9999928 L6.705,14.4099928 C6.315,14.0199928 6.315,13.3899928 6.705,12.9999928 C6.89183153,12.8127401 7.14548236,12.7075072 7.41,12.7075072 C7.67451764,12.7075072 7.92816847,12.8127401 8.115,12.9999928 L11.995,16.8799928 L15.875,12.9999928 Z M15.875,6.9999928 C16.265,6.6099928 16.905,6.6199928 17.295,6.9999928 C17.685,7.3899928 17.685,8.0199928 17.295,8.4099928 L12.705,12.9999928 C12.315,13.3899928 11.685,13.3899928 11.295,12.9999928 L6.705,8.4099928 C6.315,8.0199928 6.315,7.3899928 6.705,6.9999928 C6.89183153,6.81274013 7.14548236,6.7075072 7.41,6.7075072 C7.67451764,6.7075072 7.92816847,6.81274013 8.115,6.9999928 L11.995,10.8799928 L15.875,6.9999928 Z" id="path-2"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-Copy-3" transform="translate(-845.000000, -90.000000)">
+            <g id="挂载-copy-9" filter="url(#filter-1)" transform="translate(735.000000, 90.000000)">
+                <g id="Group-12" transform="translate(110.000000, 0.000000)">
+                    <g id="Icon-/-向上收起--Down-/-Rounded" transform="translate(12.000000, 12.000000) scale(-1, 1) rotate(-180.000000) translate(-12.000000, -12.000000) ">
+                        <mask id="mask-3" fill="white">
+                            <use xlink:href="#path-2"></use>
+                        </mask>
+                        <use id="Combined-Shape" fill="#9BACBE" fill-rule="nonzero" transform="translate(12.000000, 13.000000) scale(1, -1) rotate(-90.000000) translate(-12.000000, -13.000000) " xlink:href="#path-2"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

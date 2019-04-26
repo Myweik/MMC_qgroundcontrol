@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="33px" viewBox="0 0 32 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>摄影无点</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-8.2%" y="-2.1%" width="116.4%" height="104.7%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-Copy-3" transform="translate(-817.000000, -395.000000)">
+            <g id="挂载-copy-9" filter="url(#filter-1)" transform="translate(735.000000, 90.000000)">
+                <g id="Group-3-Copy" transform="translate(20.000000, 306.000000)">
+                    <g id="摄影-copy" transform="translate(62.000000, 0.000000)">
+                        <rect id="Rectangle-3" fill="#D8D8D8" fill-rule="nonzero" opacity="0" x="0" y="0" width="32" height="32"></rect>
+                        <path d="M19.3190111,8 L6.04246836,8 C4.91443174,8 4,8.95949622 4,10.1429095 L4,20.8572127 C4,22.0406259 4.91443174,23 6.04246836,23 L19.3190111,23 C20.447165,23 21.361714,22.0405038 21.361714,20.8572127 L21.361714,10.1429095 C21.361714,8.95949622 20.4470477,8 19.3190111,8 Z M10.638286,19.2500611 L10.638286,11.7500611 L16.7658963,15.5001222 L10.638286,19.2500611 Z M26.0452486,9.75267324 L22.3830068,12.5371607 L22.3830068,18.4624728 L26.0452486,21.2469603 C26.7012202,21.9351724 27.3474585,22.0567204 28,21.6125815 L28,9.38692982 C27.3474585,8.94242453 26.7012202,9.0638809 26.0452486,9.75267324 Z" id="录像" fill="#F63A51" fill-rule="evenodd"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

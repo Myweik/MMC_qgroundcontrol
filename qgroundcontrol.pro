@@ -1312,3 +1312,9 @@ contains (CONFIG, QGC_DISABLE_INSTALLER_SETUP) {
 } else {
     include(QGCInstaller.pri)
 }
+
+#
+# MMC
+#
+
+include(MMC/MMC.pri)
