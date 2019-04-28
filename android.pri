@@ -1,6 +1,5 @@
-include($$PWD/libs/qtandroidserialport/src/qtandroidserialport.pri)
-message("Adding Serial Java Classes")
-QT += androidextras
+#include($$PWD/libs/qtandroidserialport/src/qtandroidserialport.pri)
+message("Adding Serial Java Classes")QT += androidextras
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 OTHER_FILES += \
     $$PWD/android/AndroidManifest.xml \
