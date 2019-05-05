@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/transceiver">
+        <file>RadioSettingUrl.qml</file>
+        <file>KeysSetting.qml</file>
+    </qresource>
+</RCC>

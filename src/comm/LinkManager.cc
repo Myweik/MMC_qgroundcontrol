@@ -99,7 +99,6 @@ void LinkManager::setToolbox(QGCToolbox *toolbox)
        pSerialConfig->setDynamic(true);
        pSerialConfig->setPortName("ttysWK2");
        _sharedAutoconnectConfigurations.append(SharedLinkConfigurationPointer(pSerialConfig));
-       qDebug() << "-------" << _sharedLinks.count() << _sharedAutoconnectConfigurations.count();
        createConnectedLink(_sharedAutoconnectConfigurations.last(), false);
    }
 }

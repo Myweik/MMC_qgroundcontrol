@@ -41,6 +41,7 @@
 #if defined(QGC_GST_MICROHARD_ENABLED)
 #include "MicrohardManager.h"
 #endif
+#include "MMC/mmcplugin.h"
 
 #if defined(QGC_CUSTOM_BUILD)
 #include CUSTOMHEADER
@@ -84,6 +85,7 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
 #if defined(QGC_GST_MICROHARD_ENABLED)
     _microhardManager       = new MicrohardManager          (app, this);
 #endif
+    _transceiverManager     = new TransceiverManager        (app, this);
 }
 
 void QGCToolbox::setChildToolboxes(void)
@@ -116,6 +118,7 @@ void QGCToolbox::setChildToolboxes(void)
 #if defined(QGC_GST_MICROHARD_ENABLED)
     _microhardManager->setToolbox(this);
 #endif
+    _transceiverManager->setToolbox(this);
 }
 
 void QGCToolbox::_scanAndLoadPlugins(QGCApplication* app)
