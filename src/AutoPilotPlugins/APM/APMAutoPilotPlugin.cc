@@ -15,8 +15,6 @@
 #include "FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h"
 #include "VehicleComponent.h"
 #include "APMAirframeComponent.h"
-#include "APMAirframeComponentAirframes.h"
-#include "APMAirframeLoader.h"
 #include "APMFlightModesComponent.h"
 #include "APMRadioComponent.h"
 #include "APMSafetyComponent.h"
@@ -30,6 +28,7 @@
 #include "ESP8266Component.h"
 #include "APMHeliComponent.h"
 #include "QGCApplication.h"
+#include "ParameterManager.h"
 
 #if !defined(NO_SERIAL_LINK) && !defined(__android__)
 #include <QSerialPortInfo>
@@ -50,12 +49,9 @@ APMAutoPilotPlugin::APMAutoPilotPlugin(Vehicle* vehicle, QObject* parent)
     , _safetyComponent          (NULL)
     , _sensorsComponent         (NULL)
     , _tuningComponent          (NULL)
-    , _airframeFacts            (new APMAirframeLoader(this, vehicle->uas(), this))
     , _esp8266Component         (NULL)
     , _heliComponent            (NULL)
 {
-    APMAirframeLoader::loadAirframeFactMetaData();
-
 #if !defined(NO_SERIAL_LINK) && !defined(__android__)
     connect(vehicle->parameterManager(), &ParameterManager::parametersReadyChanged, this, &APMAutoPilotPlugin::_checkForBadCubeBlack);
 #endif
@@ -205,7 +201,7 @@ void APMAutoPilotPlugin::_checkForBadCubeBlack(void)
     if (paramMgr->parameterExists(-1, paramAcc3) && paramMgr->getParameter(-1, paramAcc3)->rawValue().toInt() == 0 &&
             paramMgr->parameterExists(-1, paramGyr3) && paramMgr->getParameter(-1, paramGyr3)->rawValue().toInt() == 0 &&
             paramMgr->parameterExists(-1, paramEnableMask) && paramMgr->getParameter(-1, paramEnableMask)->rawValue().toInt() >= 7) {
-        qgcApp()->showMessage(tr("WARNING: The flight board you are using has a critical service bulletin against ti which advise against flying. https://discuss.cubepilot.org/t/sb-0000002-critical-service-bulletin-for-cubes-purchased-between-january-2019-to-present-do-not-fly/406"));
+        qgcApp()->showMessage(tr("WARNING: The flight board you are using has a critical service bulletin against it which advises against flying. For details see: https://discuss.cubepilot.org/t/sb-0000002-critical-service-bulletin-for-cubes-purchased-between-january-2019-to-present-do-not-fly/406"));
 
     }
 }
