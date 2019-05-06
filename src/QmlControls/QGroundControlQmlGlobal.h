@@ -75,6 +75,7 @@ public:
     Q_PROPERTY(bool                 taisyncSupported    READ taisyncSupported       CONSTANT)
     Q_PROPERTY(MicrohardManager*    microhardManager    READ microhardManager       CONSTANT)
     Q_PROPERTY(bool                 microhardSupported  READ microhardSupported     CONSTANT)
+    Q_PROPERTY(TransceiverManager*  transceiverManager  READ transceiverManager     CONSTANT)
 
     Q_PROPERTY(int      supportedFirmwareCount          READ supportedFirmwareCount CONSTANT)
     Q_PROPERTY(bool     px4ProFirmwareSupported         READ px4ProFirmwareSupported CONSTANT)
@@ -185,6 +186,8 @@ public:
     bool                    microhardSupported  () { return false; }
 #endif
 
+    TransceiverManager*     transceiverManager  () { return _transceiverManager; }
+
     qreal zOrderTopMost             () { return 1000; }
     qreal zOrderWidgets             () { return 100; }
     qreal zOrderMapItems            () { return 50; }
@@ -246,6 +249,7 @@ private:
     AirspaceManager*        _airspaceManager        = nullptr;
     TaisyncManager*         _taisyncManager         = nullptr;
     MicrohardManager*       _microhardManager       = nullptr;
+    TransceiverManager*     _transceiverManager     = nullptr;
 
     bool                    _skipSetupPage          = false;
 

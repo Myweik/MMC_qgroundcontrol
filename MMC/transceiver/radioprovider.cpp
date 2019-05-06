@@ -137,7 +137,7 @@ void RadioProvider::readBytes()
 
 void RadioProvider::analysisPack(QByteArray buff)
 {
-    qDebug() << "-------------buff" << buff.toHex();
+//    qDebug() << "-------------buff" << buff.toHex();
     uint8_t tmpData[256];
     memset(tmpData, 0x00, 256 * sizeof(uint8_t));
     for(int i = 0; i < buff.length(); i++){

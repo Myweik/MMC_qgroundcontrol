@@ -8,11 +8,15 @@ HEADERS += \
     $$PWD/transceivermanager.h \
     $$PWD/radioprovider.h \
     $$PWD/radiomember.h \
+    $$PWD/radiomemberbase.h \
+    $$PWD/androidraduimember.h
 
 SOURCES += \
     $$PWD/transceivermanager.cpp \
     $$PWD/radioprovider.cpp \
     $$PWD/radiomember.cpp \
+    $$PWD/radiomemberbase.cpp \
+    $$PWD/androidraduimember.cpp
 
 
 

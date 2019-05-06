@@ -14,68 +14,9 @@
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "winmm.lib")
 
-#define  R_MODE  0X0A
-#define  L_MODE  0X05
-
-MMCKey::MMCKey(int id, QObject *parent) : QObject(parent), _id(id)
-{
-    timer = new QTimer(this);
-    timer->setInterval(100);
-    connect(timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
-
-}
-
-void MMCKey::setKey(bool key)
-{
-    if(key == _key) return;
-    _key = key;
-    emit keyChanged(_key);
-
-    if(_key){
-        emit press(this);
-        _accumulatedTime = 1;
-        timer->start();
-    }else{
-        emit upspring(this);
-        timer->stop();
-        if(_accumulatedTime  < 5) emit click(this);
-    }
-}
-
-void MMCKey::onTimeOut()
-{
-    _accumulatedTime++;
-    emit longPress(this);
-}
-//------------------------------------------------[分割线]----------------------------------------------------
 #include <QProcess>
 RadioMember::RadioMember(QObject *parent)
-    : QObject(parent)
-    , _checkStatus(No_Check)
-    , _chargeState(0)
-    , _time(0)
-    , _stateOfHealth(0)
-    , _temperature(0)
-    , _rockerState(1)
-    , _rcMode(0)
-    , _ver("")
-    , _calirationState(0)
-    , _channel1(1500)
-    , _channel2(1500)
-    , _channel3(1500)
-    , _channel4(1500)
-    , _channelBMax1(0)
-    , _channelBMax2(0)
-    , _channelBMax3(0)
-    , _channelBMax4(0)
-    , _channelBMin1(0)
-    , _channelBMin2(0)
-    , _channelBMin3(0)
-    , _channelBMin4(0)
-    , _channelBMed1(0)
-    , _channelBMed2(0)
-    , _channelBMed3(0)
-    , _channelBMed4(0)
+    : RadioMemberBase(parent)
 {
     for(int i=0; i < 8; i++){
         _key[i] = new MMCKey(i+1, this);
@@ -85,11 +26,6 @@ RadioMember::RadioMember(QObject *parent)
         connect(_key[i], SIGNAL(click(MMCKey*)), this, SLOT(onClick(MMCKey*)));
     } 
     keyBindFunction();
-
-    /* 同步电台需要主动获取数据的计时器 */
-    _syncDataTimer = new QTimer(this);
-    _syncDataTimer->setInterval(300);
-    connect(_syncDataTimer, SIGNAL(timeout()), this, SLOT(onSyncData()));
 
     QSettings settings;
     settings.beginGroup("USER_DEFINE_CONFIG");
@@ -153,33 +89,16 @@ void RadioMember::setQuantity(uchar value)
 {
     int energy = (uchar)value;
     if(energy > 100) energy = 100;
-    setEnergy(energy);
+    set_energy(energy);
 }
 
 void RadioMember::setVoltage(uchar value) //130~168
 {
     int voltage = (uchar)value;
-//    if(voltage > 168) voltage = 168;
-//    if(voltage < 130) voltage = 130;
     setVoltage((float)voltage/10);
 }
 
-void RadioMember::setRadioLock(bool ck)
-{
-    int lock;
-    if(ck)
-        lock = 1;
-    else
-        lock = 0;
 
-    if(_radioLock == lock) return;
-    _radioLock = lock;
-    emit radioLockChanged(_radioLock);
-
-    if(lock){ //串口上线时
-        _syncDataTimer->start();
-    }
-}
 
 void RadioMember::setRadioSourceState(int state)
 {
@@ -199,42 +118,30 @@ void RadioMember::setLidState(int state)
 //    qDebug() << QString("-------------------setLidState") << state;
 }
 
-void RadioMember::setRadioID(QString id)
-{
-    qDebug() << QString("-------------------radioID") << id;
-    if(_radioID == id)  return;
-    _radioID = id;
-    emit radioIDChanged();
-}
+
 
 void RadioMember::_say(const QString &text)
 {
     qgcApp()->toolbox()->audioOutput()->say(text.toLower());
 }
 
-void RadioMember::setEnergy(int value)
-{
-    if(_energy == value) return;
-    _energy = value;
-    emit energyChanged(_energy);
-}
-
 void RadioMember::setVoltage(float value)
 {
-    if(_voltage == value) return;
-    _voltage = value;
-    emit voltageChanged();
+    float voltag = voltage();
+    if(voltag == value) return;
+    set_voltage(value);
+    voltag = voltage();
 
     static float minVoltage = 13.6;
-    if(_voltage < minVoltage){
-        minVoltage = _voltage;
+    if(voltag < minVoltage){
+        minVoltage = voltag;
         if(_lang == "Chinese"){
-            _say(QString("低电压，%1伏").arg(_voltage));
+            _say(QString("低电压，%1伏").arg(voltag));
         }else{
-            _say(QString("Low Voltage,%1V").arg(_voltage));
+            _say(QString("Low Voltage,%1V").arg(voltag));
         }
 
-    }else if(_voltage > 14 &&  minVoltage < 13.4){ //表示充了电
+    }else if(voltag > 14 &&  minVoltage < 13.4){ //表示充了电
         minVoltage = 13.6;
     }
 }
@@ -242,81 +149,115 @@ void RadioMember::setVoltage(float value)
 /* **********************************************************************
  * 下发指令
  * **********************************************************************/
-void RadioMember::onSyncData()
-{
-    int i = 0;
-    if(_radioID.isEmpty()){
-        queryRadioId(); i++;
-    }
-//    if(_queryNumber < 15){ //一次start 查询20次
-//        radioControl(2); i++; _queryNumber++;
-//    }
-
-    if(i == 0) _syncDataTimer->stop(); //所有数据都已经存在，关闭定时器
-}
-
-void RadioMember::rockerControl(int state)
-{
-    if(state != 0 && state != 1) return;
-
-//    if(state == 0 || state == 1){ //由于每次开启 关闭 都要主动去查询状态  故加此if
-//        _queryNumber = 0;
-//        _syncDataTimer->start();
-//    }
-
-    char type = 0x6f;
-    char buff[1] = {state};
-//    QByteArray array.
-
-    emit _writeData(type, QByteArray(buff, 1));
-}
 
 void RadioMember::radioControl(int state)
 {
     if(state != 0 && state != 1 /*&& state != 2*/) return;
-
-//    if(state == 0 || state == 1){ //由于每次开启 关闭 都要主动去查询状态  故加此if
-//        _queryNumber = 0;
-//        _syncDataTimer->start();
-//    }
 
     char type = 0x7f;
     char buff[1] = {state};
     emit _writeData(type, QByteArray(buff, 1));
 }
 
-void RadioMember::sendCheckStatus()
+
+
+void RadioMember::analysisPack(int type, QByteArray msg)
 {
-    CheckStatus checkState = (CheckStatus)checkStatus();
-    if(checkState < 6 && checkState % 2){ //单数 重复本次校准
-    }else if(checkState == No_Check || checkState == ACK_CALIBRATION_COMPLETED || checkState == ERRORS){ //开始新的一轮校准
-        set_checkStatus(IN_CALIBRATION);
-    }else if(checkState < 6 && !(checkState % 2)){ //+1 下一步
-        set_checkStatus((CheckStatus)(checkState+1));
-    }else{//不在取值范围
-        return;
+    uchar* buff = (uchar*)msg.data();
+    ushort tep = 0;
+    float tmp;
+    if(type == 0x5f)
+//    qDebug() << "---------------------- RadioMember::analysisPack" << type << msg.toHex();
+    switch (type) {
+    case 0x1f: { //遥控器各通道 -- 16字节
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel1(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel2(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel3(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel4(tep);
+        buff += 2;
+        for(int i = 0; i < 8; i++){
+            this->setKey(i, *buff++);
+        }
+        break;
+        }
+    case 0x3f:{  //心跳
+        this->set_chargeState(*buff++);
+        this->setVoltage(*buff++);
+        this->setQuantity(*buff++);
+        this->set_time(((float)*buff++)/10);
+        this->set_stateOfHealth(*buff++);
+        memcpy(&tmp, buff, sizeof(float));
+        this->set_temperature(tmp);
+        buff += sizeof(float);
+        this->set_rockerState((*buff) & 0x01);
+        this->setRadioSourceState(((*buff)>>1 & 0x01));
+        this->setLidState(((*buff)>>2 & 0x01));
+        buff++;
+        this->set_rcMode(*buff++);
+        this->set_calirationState(*buff++);
+        this->setVer(buff);
+        buff += 4;
+        break;
     }
-    char type = 0x4f;
-    char buff[1] = {checkStatus()};
-    qDebug() << "-------------------sendCheckStatus" << type <<QByteArray(buff, 1).toHex();
-    emit _writeData(type, QByteArray(buff, 1));
-}
+    case 0x4f:{  //遥控器校准时各通道值
+        this->set_checkStatus(*buff++);
+        break;
+    }
+    case 0x5f:{  //遥控器校准时各通道值
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax1(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax2(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax3(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax4(tep);
+        buff += 2;
 
-void RadioMember::setCalirationState(bool isLeft)
-{
-    char type = 0x2f;
-    char buff[1] = {L_MODE};
-    if(!isLeft)
-        buff[0] = R_MODE;
-    emit _writeData(type, QByteArray(buff, 1));
-}
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMed1(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMed2(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMed3(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMed4(tep);
+        buff += 2;
 
-void RadioMember::queryRadioId()
-{
-    return;
-    char type = 0x8f;
-    char buff[1] = {0x01};
-    emit _writeData(type, QByteArray(buff, 1));
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMin1(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMin2(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMin3(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMin4(tep);
+        buff += 2;
+        break;
+    }
+    case 0x8f:{  //单片机唯一ID
+        this->setRadioID(QByteArray((char*)buff, 12));
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 /* **********************************************************************
@@ -359,23 +300,6 @@ QString RadioMember::getKeyValue(int key)
     return "";
 }
 
-void RadioMember::setVer(uchar *buff)
-{
-    uint32_t tmp = 0;
-    uint32_t version = 0;
-    memcpy(&tmp, buff, sizeof(uint32_t));
-    memcpy(&version, &tmp, sizeof(uint32_t));
-    int versionHardware     = (int) ((version >> 30) & 0x3);
-    int versionFunction     = (int) ((version >> 24) & 0x3f);
-    int versionOptimization = (int) ((version >> 16) & 0xff);
-    int versionYear         = (int) ((version >> 9) & 0x7f);
-    int versionMonth        = (int) ((version >> 5) & 0xf);
-    int versionDay          = (int) ((version >> 0) & 0x1f);
-    int versionTime         = versionYear*10000 + versionMonth * 100 + versionDay;
-    QString vers            = QString("%1.%2.%3.%4").arg(versionHardware).arg(versionFunction).arg(versionOptimization).arg(versionTime);
-    set_ver(vers);
-}
-
 void RadioMember::keyBindFunction()
 {
     /* 按键与功能绑定 -- 后面可用配置对应*/
@@ -402,12 +326,6 @@ void RadioMember::onPress(MMCKey *key)
     case KEY_ZOOM_UP:        //放大
         zoomUp();
         break;
-//    case KEY_CUSTOM_1:       //自定义1
-//        break;
-//    case KEY_CUSTOM_2:       //自定义2
-//        break;
-//    case KEY_FN:             //FN
-//        break;
     case KEY_MODE:           //云台模式
         break;
     case KEY_PHOTO:          //拍照
@@ -428,12 +346,6 @@ void RadioMember::onUpspring(MMCKey *key)
     case KEY_ZOOM_UP:        //放大
         zoomStop();
         break;
-//    case KEY_CUSTOM_1:       //自定义1
-//        break;
-//    case KEY_CUSTOM_2:       //自定义2
-//        break;
-//    case KEY_FN:             //FN
-//        break;
     case KEY_MODE:           //云台模式  -- 长按压
         if(key->accumulatedTime()  > 2) locking();
         break;
@@ -455,12 +367,6 @@ void RadioMember::onLongPress(MMCKey *key)
     case KEY_ZOOM_UP:        //放大
         zoomUp();
         break;
-//    case KEY_CUSTOM_1:       //自定义1
-//        break;
-//    case KEY_CUSTOM_2:       //自定义2
-//        break;
-//    case KEY_FN:             //FN
-//        break;
     case KEY_MODE:           //云台模式
         break;
     case KEY_PHOTO:          //拍照
@@ -479,10 +385,6 @@ void RadioMember::onClick(MMCKey *key)
         break;
     case KEY_ZOOM_UP:        //放大
         break;
-//    case KEY_CUSTOM_1:       //自定义1
-//        break;
-//    case KEY_CUSTOM_2:       //自定义2
-//        break;
     case KEY_FN:             //FN -- 复合功能
         fnClick();
         break;
