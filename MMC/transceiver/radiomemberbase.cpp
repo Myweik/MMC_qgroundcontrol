@@ -1,8 +1,8 @@
 #include "radiomemberbase.h"
 #include <QDebug>
 
-#define  R_MODE  0X01
-#define  L_MODE  0X00
+#define  R_MODE  0X0A
+#define  L_MODE  0X05
 
 
 MMCKey::MMCKey(int id, QObject *parent) : QObject(parent), _id(id)
@@ -195,13 +195,14 @@ void RadioMemberBase::sendCheckStatus()
     }else{//不在取值范围
         return;
     }  
-#if defined(Q_OS_ANDROID)
     char type = 0x04;
-#else
-    char type = 0x4f;
-#endif
+//#if defined(Q_OS_ANDROID)
+//    char type = 0x04;
+//#else
+//    char type = 0x4f;
+//#endif
     char buff[1] = {checkStatus()};
-    qDebug() << "-------------------sendCheckStatus" << type <<QByteArray(buff, 1).toHex();
+    qDebug() << "-------------------sendCheckStatus" << (uint8_t)type  <<QByteArray(buff, 1).toHex();
     emit _writeData(type, QByteArray(buff, 1));
 }
 

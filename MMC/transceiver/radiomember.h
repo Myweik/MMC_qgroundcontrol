@@ -39,7 +39,7 @@ public:
 
 
     /* 电台开关状态 */
-    Q_PROPERTY(int  radioSourceState        READ radioSourceState               NOTIFY radioSourceStateChanged) //0-关 1-开 2-查询
+    Q_PROPERTY(int  radioSourceState        READ radioSourceState               NOTIFY radioSourceStateChanged) //0-关 1-开
     /* 自定义功能键界面设置 */
     Q_PROPERTY(QStringList keyModes         READ keyModes                       CONSTANT)
     /* CPU唯一ID -> 作为地面站唯一ID */

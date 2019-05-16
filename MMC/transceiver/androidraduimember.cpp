@@ -12,8 +12,8 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
     uchar* buff = (uchar*)msg.data();
     ushort tep = 0;
     float tmp;
-//    if(type == 0x03)
-//    qDebug() << "---------------------- AndroidRaduiMember::analysisPack" << type << msg.toHex();
+    if(type == 0x04)
+    qDebug() << "---------------------- AndroidRaduiMember::analysisPack" << type << msg.toHex();
     switch (type) {
     case 0x01:{  //心跳
         this->set_chargeState(*buff++);
@@ -23,13 +23,10 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
         memcpy(&tmp, buff, sizeof(float));
         this->set_temperature(tmp);
         buff += sizeof(float);
-        this->set_stateOfHealth(*buff++);
+        this->set_stateOfHealth(*buff++); 
+        this->set_tepyHW(*buff++); //di mian zhan lei xing
         this->set_rcMode(*buff++);
         this->set_calirationState(*buff++);
-//        this->set_rockerState((*buff) & 0x01);
-//        this->setRadioSourceState(((*buff)>>1 & 0x01));
-//        this->setLidState(((*buff)>>2 & 0x01));
-//        buff++;
         this->setVer(buff);
         buff += 4;
         break;
@@ -47,9 +44,15 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
         memcpy(&tep, buff, sizeof(ushort));
         this->set_channel4(tep);
         buff += 2;
-        this->set_channel5(*buff++);
-        this->set_channel6(*buff++);
-        this->set_channel7(*buff++);
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel5(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel6(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel7(tep);
+        buff += 2;
         memcpy(&tep, buff, sizeof(ushort));
         this->set_channel8(tep);
         buff += 2;
@@ -80,25 +83,6 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
     }
     case 0x05:{  //遥控器校准时各通道值
         memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMax1(tep);
-        buff += 2;
-        memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMax2(tep);
-        buff += 2;
-        memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMax3(tep);
-        buff += 2;
-        memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMax4(tep);
-        buff += 2;
-        memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMax7(tep);
-        buff += 2;
-        memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMax8(tep);
-        buff += 2;
-
-        memcpy(&tep, buff, sizeof(ushort));
         this->set_channelBMid1(tep);
         buff += 2;
         memcpy(&tep, buff, sizeof(ushort));
@@ -115,6 +99,25 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
         buff += 2;
         memcpy(&tep, buff, sizeof(ushort));
         this->set_channelBMid8(tep);
+        buff += 2;
+
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax1(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax2(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax3(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax4(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax7(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channelBMax8(tep);
         buff += 2;
 
         memcpy(&tep, buff, sizeof(ushort));
@@ -156,7 +159,7 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
         buff += 2;
         break;
     }
-    case 0x8f:{  //单片机唯一ID
+    case 0x08:{  //单片机唯一ID
         this->setRadioID(QByteArray((char*)buff, 12));
         break;
     }

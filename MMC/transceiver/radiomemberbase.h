@@ -44,9 +44,9 @@ class RadioMemberBase : public QObject
     MMC_GENERATE_QML_PROPERTY(channel2,  int, "Pich")
     MMC_GENERATE_QML_PROPERTY(channel3,  int, "Accelerator")
     MMC_GENERATE_QML_PROPERTY(channel4,  int, "Yaw")
-    MMC_GENERATE_QML_PROPERTY(channel5,  int, "FlightMode")
+    MMC_GENERATE_QML_PROPERTY(channel5,  int, "M-A-P")
     MMC_GENERATE_QML_PROPERTY(channel6,  int, "F1")
-    MMC_GENERATE_QML_PROPERTY(channel7,  int, "M-A-P")
+    MMC_GENERATE_QML_PROPERTY(channel7,  int, "RTL")
     MMC_GENERATE_QML_PROPERTY(channel8,  int, "MountPich")
     MMC_GENERATE_QML_PROPERTY(channel9,  int, "MountYaw")
     MMC_GENERATE_QML_PROPERTY(channel10, int, "Zoom")
@@ -100,6 +100,8 @@ class RadioMemberBase : public QObject
     MMC_GENERATE_QML_PROPERTY(calirationState, uint, "calirationState")
     /* 版本号 */
     MMC_GENERATE_QML_PROPERTY(ver, QString, "Version")
+    /* she bei tepy */
+    MMC_GENERATE_QML_PROPERTY(tepyHW, uint, "TepyHW")
 
     /* 电池电量 */
     MMC_GENERATE_QML_PROPERTY(energy, uint, "energy")

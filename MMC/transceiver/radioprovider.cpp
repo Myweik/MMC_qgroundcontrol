@@ -208,9 +208,9 @@ int RadioProvider::_writeData(char type, QByteArray buff)
     *buf++ = type;   //--type
     *buf++ = len;   //--len
     memcpy(buf, buff.data(), len); //data
-    buff += len;
-    *buf++ = MMC::_crc8((uchar*)buff.data(), len);   //--check - CRC
-    qDebug() << "------------------RadioProvider::_writeData" << len  << QByteArray((char*)fileData, len + 5).toHex();
-    return _serial->write((char*)fileData, len + 5);  //zhi neng zai zhe fa song
+    buf += len;
+    *buf++ = MMC::_crc8((uchar*)&fileData[3], len + 2);   //--check - CRC
+    qDebug() << "------------------RadioProvider::_writeData" << len  << QByteArray((char*)fileData, len + 6).toHex();
+    return _serial->write((char*)fileData, len + 6);  //zhi neng zai zhe fa song
 }
 
