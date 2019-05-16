@@ -1,8 +1,8 @@
 #include "radiomemberbase.h"
 #include <QDebug>
 
-#define  R_MODE  0X0A
-#define  L_MODE  0X05
+#define  R_MODE  0X01
+#define  L_MODE  0X00
 
 
 MMCKey::MMCKey(int id, QObject *parent) : QObject(parent), _id(id)
@@ -52,18 +52,34 @@ RadioMemberBase::RadioMemberBase(QObject *parent)
     , _channel2(1500)
     , _channel3(1500)
     , _channel4(1500)
+    , _channel5(1500)
+    , _channel6(1500)
+    , _channel7(1500)
+    , _channel8(1500)
+    , _channel9(1500)
+    , _channel10(1500)
+    , _channel11(1500)
+    , _channel12(1500)
+    , _channel13(1500)
+    , _channel14(1500)
     , _channelBMax1(0)
     , _channelBMax2(0)
     , _channelBMax3(0)
     , _channelBMax4(0)
+    , _channelBMax7(0)
+    , _channelBMax8(0)
     , _channelBMin1(0)
     , _channelBMin2(0)
     , _channelBMin3(0)
     , _channelBMin4(0)
-    , _channelBMed1(0)
-    , _channelBMed2(0)
-    , _channelBMed3(0)
-    , _channelBMed4(0)
+    , _channelBMin7(0)
+    , _channelBMin8(0)
+    , _channelBMid1(0)
+    , _channelBMid2(0)
+    , _channelBMid3(0)
+    , _channelBMid4(0)
+    , _channelBMid7(0)
+    , _channelBMid8(0)
 {
     /* 同步电台需要主动获取数据的计时器 */
     _syncDataTimer = new QTimer(this);
@@ -122,7 +138,8 @@ void RadioMemberBase::onSyncData()
 {
     int i = 0;
     if(_radioID.isEmpty()){
-        queryRadioId(); i++;
+//        queryRadioId();
+        i++;
     }
 
     if(i == 0) _syncDataTimer->stop(); //所有数据都已经存在，关闭定时器
@@ -136,9 +153,31 @@ void RadioMemberBase::queryRadioId()
     emit _writeData(type, QByteArray(buff, 1));
 }
 
+void RadioMemberBase::vehicleConnectStatus(bool status)
+{
+    char type = 0x10;
+    char buff[1] = {0x01};
+    if(status)
+        buff[0] = 0x02;
+    emit _writeData(type, QByteArray(buff, 1));
+}
+
+void RadioMemberBase::vehicleEnergyStatus(bool status)
+{
+    char type = 0x11;
+    char buff[1] = {0x01};
+    if(status)
+        buff[0] = 0x02;
+    emit _writeData(type, QByteArray(buff, 1));
+}
+
 void RadioMemberBase::setCalirationState(bool isLeft)
 {
+#if defined(Q_OS_ANDROID)
+    char type = 0x02;
+#else
     char type = 0x2f;
+#endif
     char buff[1] = {L_MODE};
     if(!isLeft)
         buff[0] = R_MODE;
@@ -155,8 +194,12 @@ void RadioMemberBase::sendCheckStatus()
         set_checkStatus((CheckStatus)(checkState+1));
     }else{//不在取值范围
         return;
-    }
+    }  
+#if defined(Q_OS_ANDROID)
+    char type = 0x04;
+#else
     char type = 0x4f;
+#endif
     char buff[1] = {checkStatus()};
     qDebug() << "-------------------sendCheckStatus" << type <<QByteArray(buff, 1).toHex();
     emit _writeData(type, QByteArray(buff, 1));

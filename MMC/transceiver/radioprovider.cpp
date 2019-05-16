@@ -142,7 +142,7 @@ void RadioProvider::analysisPack(QByteArray buff)
     memset(tmpData, 0x00, 256 * sizeof(uint8_t));
     for(int i = 0; i < buff.length(); i++){
         if(0 < splicePacket((buff.at(i)), tmpData)){
-            emit RTCMDataUpdate(tmpData[0], QByteArray((char*)&tmpData[3], tmpData[1]));
+            emit RTCMDataUpdate(tmpData[1], QByteArray((char*)&tmpData[3], tmpData[2]));
 
             if(_isconnect <= 0){
                 emit isconnectChanged(true);
@@ -157,7 +157,7 @@ int RadioProvider::splicePacket(const uint8_t data, uint8_t *dst)
     static bool packeting = false;
     static QList<uint8_t> packList;
 
-    // 05 5A type len check data
+    // 5A 5A  index type len data check
     if(packeting)
     {
         if(packList.count() == 1 && data != 0xA5){ //判断第二个字节
@@ -166,23 +166,24 @@ int RadioProvider::splicePacket(const uint8_t data, uint8_t *dst)
         }
 
         packList.append(data);
-        if(packList.count() < 5) return -1;
+        if(packList.count() < 6) return -1;
 
-        if(packList.count() > 5 && packList.at(3)+5 <= packList.count())
+        if(packList.count() > 6 && packList.at(4)+6 <= packList.count())
         {
             packeting = false;
             uint8_t tmpData[255]={0};
-            for(int i=0; i < packList.at(3) + 3; i++)
+            for(int i=0; i < packList.at(4) + 4; i++)
                 tmpData[i] = packList.at(i+2);
-#if defined(Q_OS_ANDROID)
-            uint8_t check = MMC::_xor8(&tmpData[3], tmpData[1]);
-#else
-            uint8_t check = MMC::_crc8(&tmpData[3], tmpData[1]);
-#endif
-            if(check != tmpData[2]) //crc
+//#if defined(Q_OS_ANDROID)
+//            uint8_t check = MMC::_xor8(&tmpData[3], tmpData[2]);
+//#else
+            uint8_t check = MMC::_crc8(&tmpData[1], tmpData[2] + 2);
+//#endif
+//            qDebug() << "---------------------------crc" << check << tmpData[tmpData[2] + 3];
+            if(check != tmpData[tmpData[2] + 3]) //crc
                 return -1;
-            memcpy(dst, &tmpData[0], (size_t)(tmpData[1] + 3));
-            return tmpData[1]+3;
+            memcpy(dst, &tmpData[0], (size_t)(tmpData[2] + 4));
+            return tmpData[2] + 4;
         }
     }
     else if(!packeting && data == 0x5A)
@@ -194,19 +195,22 @@ int RadioProvider::splicePacket(const uint8_t data, uint8_t *dst)
     return -1;
 }
 
+// 5A 5A  index type len data check
 int RadioProvider::_writeData(char type, QByteArray buff)
 {
+    static uchar index = 0;
     uint8_t len = buff.length();
     uint8_t fileData[256] = {0};
     uint8_t* buf = fileData;
     *buf++ = 0x5A;   //--头
     *buf++ = 0xA5;   //--id
+    *buf++ = index++;//--index
     *buf++ = type;   //--type
     *buf++ = len;   //--len
-    *buf++ = MMC::_crc8((uchar*)buff.data(), len);   //--check - CRC
     memcpy(buf, buff.data(), len); //data
     buff += len;
+    *buf++ = MMC::_crc8((uchar*)buff.data(), len);   //--check - CRC
     qDebug() << "------------------RadioProvider::_writeData" << len  << QByteArray((char*)fileData, len + 5).toHex();
-    return _serial->write((char*)fileData, len + 5);
+    return _serial->write((char*)fileData, len + 5);  //zhi neng zai zhe fa song
 }
 

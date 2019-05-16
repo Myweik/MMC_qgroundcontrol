@@ -225,16 +225,16 @@ void RadioMember::analysisPack(int type, QByteArray msg)
         buff += 2;
 
         memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMed1(tep);
+        this->set_channelBMid1(tep);
         buff += 2;
         memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMed2(tep);
+        this->set_channelBMid2(tep);
         buff += 2;
         memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMed3(tep);
+        this->set_channelBMid3(tep);
         buff += 2;
         memcpy(&tep, buff, sizeof(ushort));
-        this->set_channelBMed4(tep);
+        this->set_channelBMid4(tep);
         buff += 2;
 
         memcpy(&tep, buff, sizeof(ushort));

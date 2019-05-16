@@ -40,24 +40,46 @@ class RadioMemberBase : public QObject
     Q_OBJECT
 
     /* 校准后的通道 1-4 */
-    MMC_GENERATE_QML_PROPERTY(channel1, int, "channel1")
-    MMC_GENERATE_QML_PROPERTY(channel2, int, "channel2")
-    MMC_GENERATE_QML_PROPERTY(channel3, int, "channel3")
-    MMC_GENERATE_QML_PROPERTY(channel4, int, "channel4")
+    MMC_GENERATE_QML_PROPERTY(channel1,  int, "Roll")
+    MMC_GENERATE_QML_PROPERTY(channel2,  int, "Pich")
+    MMC_GENERATE_QML_PROPERTY(channel3,  int, "Accelerator")
+    MMC_GENERATE_QML_PROPERTY(channel4,  int, "Yaw")
+    MMC_GENERATE_QML_PROPERTY(channel5,  int, "FlightMode")
+    MMC_GENERATE_QML_PROPERTY(channel6,  int, "F1")
+    MMC_GENERATE_QML_PROPERTY(channel7,  int, "M-A-P")
+    MMC_GENERATE_QML_PROPERTY(channel8,  int, "MountPich")
+    MMC_GENERATE_QML_PROPERTY(channel9,  int, "MountYaw")
+    MMC_GENERATE_QML_PROPERTY(channel10, int, "Zoom")
+    MMC_GENERATE_QML_PROPERTY(channel11, int, "Photo")
+    MMC_GENERATE_QML_PROPERTY(channel12, int, "Video")
+    MMC_GENERATE_QML_PROPERTY(channel13, int, "channel13")
+    MMC_GENERATE_QML_PROPERTY(channel14, int, "channel14")
 
     /* 原始通道 1-4 */
     MMC_GENERATE_QML_PROPERTY(channelBMax1, int, "channelBMax1")
     MMC_GENERATE_QML_PROPERTY(channelBMax2, int, "channelBMax2")
     MMC_GENERATE_QML_PROPERTY(channelBMax3, int, "channelBMax3")
     MMC_GENERATE_QML_PROPERTY(channelBMax4, int, "channelBMax4")
-    MMC_GENERATE_QML_PROPERTY(channelBMed1, int, "channelBMed1")
-    MMC_GENERATE_QML_PROPERTY(channelBMed2, int, "channelBMed2")
-    MMC_GENERATE_QML_PROPERTY(channelBMed3, int, "channelBMed3")
-    MMC_GENERATE_QML_PROPERTY(channelBMed4, int, "channelBMed4")
+    MMC_GENERATE_QML_PROPERTY(channelBMax7, int, "channelBMax7")
+    MMC_GENERATE_QML_PROPERTY(channelBMax8, int, "channelBMax8")
+    MMC_GENERATE_QML_PROPERTY(channelBMid1, int, "channelBMid1")
+    MMC_GENERATE_QML_PROPERTY(channelBMid2, int, "channelBMid2")
+    MMC_GENERATE_QML_PROPERTY(channelBMid3, int, "channelBMid3")
+    MMC_GENERATE_QML_PROPERTY(channelBMid4, int, "channelBMid4")
+    MMC_GENERATE_QML_PROPERTY(channelBMid7, int, "channelBMid7")
+    MMC_GENERATE_QML_PROPERTY(channelBMid8, int, "channelBMid8")
     MMC_GENERATE_QML_PROPERTY(channelBMin1, int, "channelBMin1")
     MMC_GENERATE_QML_PROPERTY(channelBMin2, int, "channelBMin2")
     MMC_GENERATE_QML_PROPERTY(channelBMin3, int, "channelBMin3")
     MMC_GENERATE_QML_PROPERTY(channelBMin4, int, "channelBMin4")
+    MMC_GENERATE_QML_PROPERTY(channelBMin7, int, "channelBMin7")
+    MMC_GENERATE_QML_PROPERTY(channelBMin8, int, "channelBMin8")
+    MMC_GENERATE_QML_PROPERTY(channelBVer1, int, "channelBVer1")
+    MMC_GENERATE_QML_PROPERTY(channelBVer2, int, "channelBVer2")
+    MMC_GENERATE_QML_PROPERTY(channelBVer3, int, "channelBVer3")
+    MMC_GENERATE_QML_PROPERTY(channelBVer4, int, "channelBVer4")
+    MMC_GENERATE_QML_PROPERTY(channelBVer7, int, "channelBVer7")
+    MMC_GENERATE_QML_PROPERTY(channelBVer8, int, "channelBVer8")
 
     /* 校准过程状态位置 */
     MMC_GENERATE_QML_PROPERTY(checkStatus, uint, "CheckStatus")
@@ -83,18 +105,18 @@ class RadioMemberBase : public QObject
     MMC_GENERATE_QML_PROPERTY(energy, uint, "energy")
     /* 电池电压 */
     MMC_GENERATE_QML_PROPERTY(voltage, float, "voltage")
-public:
-    typedef enum Check_Status
+    public:
+        typedef enum Check_Status
     {
-        No_Check = 0,                   //未在校准过程
-        IN_CALIBRATION = 1,             //校准过程中值——发送
-        ACK_IN_CALIBRATION = 2,         //校准过程中值——回收
-        GETTING_MAXIMUM_MINIMUM = 3,    //校准过程最值——发送
-        ACK_GETTING_MAXIMUM_MINIMUM = 4,//校准过程最值——回收
-        CALIBRATION_COMPLETED = 5,      //询问是否完成校准
-        ACK_CALIBRATION_COMPLETED = 6,  //回复是否完成校准--已完成
-        ERRORS = 0XFF,                  //回复是否完成校准--失败
-    } CheckStatus;
+                         No_Check = 0,                   //未在校准过程
+                         IN_CALIBRATION = 1,             //校准过程中值——发送
+                         ACK_IN_CALIBRATION = 2,         //校准过程中值——回收
+                         GETTING_MAXIMUM_MINIMUM = 3,    //校准过程最值——发送
+                         ACK_GETTING_MAXIMUM_MINIMUM = 4,//校准过程最值——回收
+                         CALIBRATION_COMPLETED = 5,      //询问是否完成校准
+                         ACK_CALIBRATION_COMPLETED = 6,  //回复是否完成校准--已完成
+                         ERRORS = 0XFF,                  //回复是否完成校准--失败
+} CheckStatus;
     explicit RadioMemberBase(QObject *parent = nullptr);
 
     /* url */ //
@@ -116,6 +138,9 @@ public:
 
     /* 下发操作 */
     void queryRadioId();          //查询单片机唯一ID
+    void vehicleConnectStatus(bool status); //vehicle lian jie zhuang tai bao jin
+    void vehicleEnergyStatus(bool status);  //vehicle dian liang bao jin
+
     /* 设置遥控器模式 */
     Q_INVOKABLE void setCalirationState(bool isLeft); //true-左手模式 false-右手模式
     Q_INVOKABLE void sendCheckStatus();       //摇杆校准
@@ -126,15 +151,15 @@ signals:
     void radioIDChanged();
 
 public slots:
-     void onSyncData();               //后台主动获取数据
+    void onSyncData();               //后台主动获取数据
 
 private:
-        QTimer* _syncDataTimer = nullptr; //从电台同步数据的定时器
+    QTimer* _syncDataTimer = nullptr; //从电台同步数据的定时器
 
-        /* 电台在线状态 */
-        int _radioLock = 0;
-        /* 电台ID */
-        QString _radioID = "";
+    /* 电台在线状态 */
+    int _radioLock = 0;
+    /* 电台ID */
+    QString _radioID = "";
 };
 
 #endif // RADIOMEMBERBASE_H
