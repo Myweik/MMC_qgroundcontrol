@@ -1316,3 +1316,16 @@ contains (CONFIG, QGC_DISABLE_INSTALLER_SETUP) {
 #
 
 include(MMC/MMC.pri)
+
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS = \
+        /home/xuan/src/lianxin/testUsbDemo/libs/libusb-1.0.22/android/libs/armeabi-v7a/libusb1.0.so \
+        /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavfilter-6.so \
+        /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavutil-55.so \
+        /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavformat-57.so \
+        /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libpostproc-54.so \
+        /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswresample-2.so \
+        /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale-4.so \
+        /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavcodec-57.so \
+        $$PWD/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavdevice-57.so
+}

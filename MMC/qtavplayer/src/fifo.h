@@ -100,6 +100,7 @@ public:
 
     void write(unsigned char*,int);
     int  read(unsigned char*);
+    void clear();
     int  size();
 	void initialfifo();
 public:	signals:

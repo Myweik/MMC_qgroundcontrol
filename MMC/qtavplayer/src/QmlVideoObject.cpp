@@ -49,11 +49,11 @@ VlcQmlVideoObject::VlcQmlVideoObject(QQuickItem *parent)
 
 VlcQmlVideoObject::~VlcQmlVideoObject()
 {
+    qDebug() << "----------------------VlcQmlVideoObject::~VlcQmlVideoObject";
     if (_graphicsPainter)
         delete _graphicsPainter;
     if(_decoder)
         delete _decoder;
-
 }
 
 QRectF VlcQmlVideoObject::boundingRect() const

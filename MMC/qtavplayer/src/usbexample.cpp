@@ -10,6 +10,17 @@
 usbfifo *g_fifo;
 QMutex usb_byte_fifo_mutex;
 
+void UsbExampleTask::run()
+{
+    switch(command){
+    case UsbExampleTaskCommand_Read:
+        mCodec->readUsb();
+        break;
+    }
+}
+
+//----------------------------------------------------------------------------------
+
 UsbExample::UsbExample(QObject *parent)
     : QObject(parent), m_usb_dev(new QUsbDevice()), m_transfer_handler(Q_NULLPTR)
 {
@@ -22,6 +33,8 @@ UsbExample::UsbExample(QObject *parent)
     if (this->openDevice()) {
         qInfo("Device open!");
         this->write(&m_send);
+
+        addReadTask();
     } else {
         qWarning("Could not open device!");
     }
@@ -89,11 +102,26 @@ bool UsbExample::openHandle()
     connect(m_transfer_handler, SIGNAL(bytesWritten(qint64)), this, SLOT(onWriteComplete(qint64)));
 
     b = m_transfer_handler->open(QIODevice::ReadWrite);
-    if (b) {
-        m_transfer_handler->setPolling(true);
-    }
+
+//    if (b) {
+//        m_transfer_handler->setPolling(true);
+//    }
 
     return b;
+}
+
+void UsbExample::addReadTask()
+{
+    mReadUsbThread.addTask(new UsbExampleTask(this,UsbExampleTask::UsbExampleTaskCommand_Read));
+}
+
+void UsbExample::readUsb()
+{
+    if (m_transfer_handler) {
+        m_transfer_handler->poll();
+    }
+    QThread::msleep(3);
+    addReadTask();
 }
 
 void UsbExample::closeHandle()
@@ -129,27 +157,21 @@ void UsbExample::write(QByteArray *buf)
 void UsbExample::ProcessVideoRead(unsigned char *buf, int len)
 {
 //    int fifoactsize=0;
-    usb_byte_fifo_mutex.lock();
+//    usb_byte_fifo_mutex.lock();
 
     g_fifo->write(buf,len);
-//    if (!g_fifo->full)
-//    {
-//        g_fifo->write(buf,len,fifoactsize);
-//    }
-    usb_byte_fifo_mutex.unlock();
+
+//    usb_byte_fifo_mutex.unlock();
 }
 
 void UsbExample::onReadyRead()
 {
-    qDebug("onReadyRead");
     this->read(&m_recv);
-
+    qDebug() << "onReadyRead" << m_recv.size();
     if(m_recv.size() > 0){
         ProcessVideoRead((uchar*)m_recv.data(), m_recv.size());
          m_recv.clear();
     }
-
-
 //    this->write(&m_send);
 }
 
@@ -157,3 +179,5 @@ void UsbExample::onWriteComplete(qint64 bytes)
 {
     qDebug() << "onWriteComplete" << bytes << "bytes";
 }
+
+

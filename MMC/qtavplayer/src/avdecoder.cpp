@@ -186,7 +186,7 @@ void AVDecoder::rePlay()
 
 void AVDecoder::wakeupPlayer()
 {
-    mPlayeThread.addTask(new AVCodecTask(this, AVCodecTask::AVCoTaskCommand_Render));
+    mPlayeThread /*mProcessThread*/.addTask(new AVCodecTask(this, AVCodecTask::AVCoTaskCommand_Render));
 }
 
 void AVDecoder::saveTs(bool status)
@@ -233,7 +233,7 @@ void AVDecoder::getPacketTask(int type)
 
 void AVDecoder::decodecTask(int type)
 {
-    mDecodeThread /*mProcessThread*/.addTask(new AVCodecTask(this,AVCodecTask::AVCodecTaskCommand_DecodeToRender));
+   /* mDecodeThread */mProcessThread.addTask(new AVCodecTask(this,AVCodecTask::AVCodecTaskCommand_DecodeToRender));
 }
 
 //static int hw_decoder_init(AVCodecContext *ctx, AVBufferRef *hw_device_ctx, const AVCodecHWConfig* config)
@@ -252,6 +252,8 @@ void AVDecoder::decodecTask(int type)
 //}
 
 void AVDecoder::init(){
+    return;
+
     QMutexLocker locker(&mDeleteMutex);
     if(mIsInit)
         return;
@@ -501,9 +503,9 @@ static int readRawDataCB(void *opaque, uint8_t *buf, int buf_size)
     int len = -1;
     while(len < 1)
     {
-        usb_byte_fifo_mutex.lock();
+//        usb_byte_fifo_mutex.lock();
         len = g_fifo->read(buf);
-        usb_byte_fifo_mutex.unlock();
+//        usb_byte_fifo_mutex.unlock();
         QThread::msleep(1);
     }
 //    qDebug() <<"-------------------------readRawDataCB" << QDateTime::currentMSecsSinceEpoch() - lastTime2 << g_fifo->size() << len ;
@@ -513,6 +515,11 @@ static int readRawDataCB(void *opaque, uint8_t *buf, int buf_size)
 
 void AVDecoder::init2(){
     QMutexLocker locker(&mDeleteMutex);
+
+//    usb_byte_fifo_mutex.lock();
+    g_fifo->clear();
+//    usb_byte_fifo_mutex.unlock();
+
     if(mIsInit)
         return;
     mIsInit = true;
@@ -1080,10 +1087,13 @@ void AVDecoder::requestRender()
         int space3 =QDateTime::currentMSecsSinceEpoch() - lastTime2; //no data time
 
         qint64 lastTime = QDateTime::currentMSecsSinceEpoch();
+
         qint64 currentTime = requestRenderNextFrame(); //x显示
+
+
         int space = QDateTime::currentMSecsSinceEpoch() - lastTime;
 
-        qDebug() << "----------------------- len" << len << _fps << space;
+//        qDebug() << "----------------------- len" << len << _fps << space;
         int frameStep = 1000 / (_fps +3)/* + 1*/;
 //        int space2  = frameStep;
 //        if(len > 5){
@@ -1100,7 +1110,7 @@ void AVDecoder::requestRender()
 //            space = frameStep;
 //        }
         space = frameStep - space;
-        qDebug() << "----------------------- len2  << space" << len  <<frameStep << space << space3;
+//        qDebug() << "----------------------- len2  << space" << len  <<frameStep << space << space3;
 
 //        QThread::msleep(space);
 
@@ -1123,6 +1133,7 @@ void AVDecoder::statusChanged(AVDefine::AVMediaStatus status){
 }
 
 void AVDecoder::release(bool isDeleted){
+    qDebug() << "_----------------------------RES0";
     mDecodeThread.clearAllTask(); //清除所有任务
     mProcessThread.clearAllTask(); //清除所有任务
     if(videoq){
@@ -1132,6 +1143,7 @@ void AVDecoder::release(bool isDeleted){
         renderq->release();
     }
 
+    qDebug() << "_----------------------------RES1";
     mVideoCodecCtxMutex.lockForWrite();
     if(mVideoCodecCtx != NULL){
         if(avcodec_is_open(mVideoCodecCtx))
@@ -1144,10 +1156,15 @@ void AVDecoder::release(bool isDeleted){
         mVideoCodecCtx = NULL;
     }
     mVideoCodecCtxMutex.unlock();
-    if(mVideoCodec != NULL){
-        av_free(mVideoCodec);
-        mVideoCodec = NULL;
-    }
+
+#if defined(Q_OS_ANDROID)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_WIN32)
+        if(mVideoCodec != NULL){
+            av_free(mVideoCodec);
+            mVideoCodec = NULL;
+        }
+#endif
+        qDebug() << "_----------------------------RES3";
     if(mFormatCtx != NULL){
         if( mIsOpenVideoCodec ){
             av_read_pause(mFormatCtx);
@@ -1164,6 +1181,7 @@ void AVDecoder::release(bool isDeleted){
         sws_freeContext(mRGBSwsCtx);
         mRGBSwsCtx = NULL;
     }
+    qDebug() << "_----------------------------RES4";
     if(outputContext != NULL){
         for(int i = 0; i < outputContext->nb_streams; i++)
         {
@@ -1198,18 +1216,9 @@ qint64 AVDecoder::requestRenderNextFrame(){
 
     if(renderq->size()){
         AVFrame* frame = renderq->get();
-//        static qint64 lastTime = QDateTime::currentMSecsSinceEpoch();
-//        if(frame->pict_type == 1){
-//            qDebug() << "--------------------------requestRenderNextFrameI" << frame->pict_type << QDateTime::currentMSecsSinceEpoch() - lastTime;
-//            lastTime = QDateTime::currentMSecsSinceEpoch();
-//        }
-//        qDebug() << "--------------------------requestRenderNextFrame" << frame->pict_type;
-
         VlcVideoFrame* _frame = nullptr;
-        if(mCallback){
+        if(mCallback /* 0*/){
             mCallback->lockCallback((void**) &_frame);
-//            qDebug() << "--------------------------1" << _frame << frame->format << _frame->width << _frame->height;
-
             if(!_frame->inited){
                 _frame->inited = true;
                 _frame->width  = frame->width;

@@ -18,7 +18,7 @@ usbfifo::~usbfifo(void)
 
 void usbfifo::write(unsigned char *buf, int length)
 {
-    qDebug() << "-------------------------usbfifo::write" << length;
+    qDebug() << "-------------------------usbfifo::write" << length << _buffQurue->size();
     QByteArray* buff = new QByteArray;
     buff->resize(length);
     memcpy(buff->data(), buf, static_cast<ulong>(length));
@@ -30,6 +30,7 @@ void usbfifo::write(unsigned char *buf, int length)
 
 int usbfifo::read(unsigned char *buf)
 {
+     qDebug() << "-------------------------usbfifo::read" << _buffQurue->size();
     if(_buffQurue->size() < 1)
         return -1;
     _usbByteMutex.lock();
@@ -40,6 +41,20 @@ int usbfifo::read(unsigned char *buf)
     buff->clear();
     delete buff;
     return len;
+}
+
+void usbfifo::clear()
+{
+    int size = _buffQurue->size();
+    if(size < 1)
+        return ;
+    for(int i = 0; i < size; i++){
+        _usbByteMutex.lock();
+        QByteArray* buff = _buffQurue->get();
+        _usbByteMutex.unlock();
+        buff->clear();
+        delete buff;
+    }
 }
 
 int usbfifo::size()

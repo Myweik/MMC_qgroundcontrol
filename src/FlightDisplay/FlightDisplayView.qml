@@ -434,10 +434,20 @@ QGCView {
 //                anchors.fill:   parent
 //                visible:        QGroundControl.videoManager.isGStreamer
 //            }
+
             Loader {
                 anchors.fill:   parent
                 visible:        true // !QGroundControl.videoManager.isGStreamer
-                source:         "qrc:/ffmpeg/VLCView.qml"
+//                source:       /*visible ? */"qrc:/ffmpeg/VLCView.qml"/*:""*/
+                Timer {
+                    id: ffmpegTimer
+                    interval : 15000
+                    repeat : false
+                    running : false
+                    triggeredOnStart : false
+                    onTriggered: parent.source = "qrc:/ffmpeg/VLCView.qml"
+                }
+                Component.onCompleted: ffmpegTimer.start()
             }
 
 //            //-- UVC Video (USB Camera or Video Device)

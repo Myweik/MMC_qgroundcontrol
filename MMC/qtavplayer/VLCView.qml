@@ -20,6 +20,7 @@ Rectangle {
 
     anchors.fill:   parent
     color:          Qt.rgba(0,0,0,0.75)
+//     color:          Qt.rgba(0,9,0,0.75)
 
 //    onVisibleChanged: {
 //        if(!visible)

@@ -100,11 +100,13 @@ Item {
         if(currentPopUp) {
             currentPopUp.close()
         }
+
+         ScreenTools.availableHeight = parent.height - toolBar.height
+        hideAllViews()
         if (planViewLoader.source   != _planViewSource) {
             planViewLoader.source   = _planViewSource
         }
-        ScreenTools.availableHeight = parent.height - toolBar.height
-        hideAllViews()
+
         planViewLoader.visible = true
         planToolBar.visible = true
     }
@@ -266,6 +268,8 @@ Item {
         }
     }
 
+//    Component.onCompleted: mainWindow.showPlanView()
+
     //-- Main UI
 
     MainToolBar {
@@ -324,6 +328,8 @@ Item {
         anchors.top:        toolBar.bottom
         anchors.bottom:     parent.bottom
         visible:            false
+
+         source:             _settingsViewSource
 /*
         onVisibleChanged: {
             if (!visible) {
@@ -340,16 +346,18 @@ Item {
         anchors.top:        toolBar.bottom
         anchors.bottom:     parent.bottom
         visible:            false
-
         property var planToolBar: planToolBar
+
+        source:             _setupViewSource
     }
 
     Loader {
         id:                 planViewLoader
         anchors.fill:       parent
         visible:            false
-
         property var toolbar: planToolBar
+
+        source:             _planViewSource
     }
 
     FlightDisplayView {
