@@ -27,9 +27,9 @@ import QGroundControl.Palette               1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.SettingsManager       1.0
 
-QGCView {
+/*QGCView*/Rectangle {
     id:                 _qgcView
-    viewPanel:          panel
+//    viewPanel:          panel
     color:              qgcPal.window
     anchors.fill:       parent
     anchors.margins:    ScreenTools.defaultFontPixelWidth
@@ -124,7 +124,7 @@ QGCView {
         }
     }
 
-    QGCViewPanel {
+    /*QGCViewPanel*/ Item {
         id:             panel
         anchors.fill:   parent
         QGCFlickable {
@@ -262,21 +262,23 @@ QGCView {
                                 spacing:  20
                                 QGCRadioButton {
                                     text:               qsTr("Left Model", "左手模式")
-                                    exclusiveGroup:     fenceActionRadioGroup
+//                                    exclusiveGroup:     fenceActionRadioGroup
                                     checked:            radioMember.rcMode === 0x05
                                     onClicked: {
                                         console.log("--------------------Left Model")
-                                        radioMember.setCalirationState(true)
+                                        if(checked)
+                                            radioMember.setCalirationState(true)
                                     }
                                 }
 
                                 QGCRadioButton {
                                     text:               qsTr("Right Model", "右手模式")
-                                    exclusiveGroup:     fenceActionRadioGroup
+//                                    exclusiveGroup:     fenceActionRadioGroup
                                     checked:            radioMember.rcMode === 0x0A
                                     onClicked: {
                                         console.log("--------------------Right Model")
-                                        radioMember.setCalirationState(false)
+                                        if(checked)
+                                            radioMember.setCalirationState(false)
                                     }
                                 }
                             }
