@@ -80,29 +80,29 @@ int WindowsCrtReportHook(int reportType, char* message, int* returnValue)
 
 #endif
 
-#if defined(__android__)
-#include <jni.h>
-#include "JoystickAndroid.h"
-#if !defined(NO_SERIAL_LINK)
-#include "qserialport.h"
-#endif
+//#if defined(__android__)
+//#include <jni.h>
+//#include "JoystickAndroid.h"
+//#if !defined(NO_SERIAL_LINK)
+//#include "qserialport.h"
+//#endif
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved)
-{
-    Q_UNUSED(reserved);
+//jint JNI_OnLoad(JavaVM* vm, void* reserved)
+//{
+//    Q_UNUSED(reserved);
 
-    JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
-        return -1;
-    }
- #if !defined(NO_SERIAL_LINK)
-    QSerialPort::setNativeMethods();
- #endif
-    JoystickAndroid::setNativeMethods();
+//    JNIEnv* env;
+//    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+//        return -1;
+//    }
+// #if !defined(NO_SERIAL_LINK)
+//    QSerialPort::setNativeMethods();
+// #endif
+//    JoystickAndroid::setNativeMethods();
 
-    return JNI_VERSION_1_6;
-}
-#endif
+//    return JNI_VERSION_1_6;
+//}
+//#endif
 
 #ifdef __android__
 #include <QtAndroid>
