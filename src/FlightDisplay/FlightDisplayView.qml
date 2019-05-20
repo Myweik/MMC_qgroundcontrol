@@ -357,12 +357,12 @@ Item {
         //-- Video View
         Item {
             id:             _flightVideo
-            z:              _mainIsMap ? _panel.z + 2 : _panel.z + 1
-            width:          !_mainIsMap ? _panel.width  : _pipSize
-            height:         !_mainIsMap ? _panel.height : _pipSize * (9/16)
-            anchors.left:   _panel.left
-            anchors.bottom: _panel.bottom
-            visible:        /*QGroundControl.videoManager.hasVideo && */ (!_mainIsMap || _isPipVisible)
+            z:              mainIsMap ? _mapAndVideo.z + 2 : _mapAndVideo.z + 1
+            width:          !mainIsMap ? _mapAndVideo.width  : _pipSize
+            height:         !mainIsMap ? _mapAndVideo.height : _pipSize * (9/16)
+            anchors.left:   _mapAndVideo.left
+            anchors.bottom: _mapAndVideo.bottom
+            visible:        /*QGroundControl.videoManager.hasVideo && */ (!mainIsMap || _isPipVisible)
 
             onParentChanged: {
                 /* If video comes back from popup
