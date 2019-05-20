@@ -15,7 +15,7 @@ class QDomNodeList;
 class QGCCameraParamIO;
 
 Q_DECLARE_LOGGING_CATEGORY(CameraControlLog)
-Q_DECLARE_LOGGING_CATEGORY(CameraControlLogVerbose)
+Q_DECLARE_LOGGING_CATEGORY(CameraControlVerboseLog)
 
 //-----------------------------------------------------------------------------
 class QGCVideoStreamInfo : public QObject
@@ -114,10 +114,27 @@ public:
         PHOTO_CAPTURE_TIMELAPSE,
     };
 
+    //-- Storage Status
+    enum StorageStatus {
+        STORAGE_EMPTY = STORAGE_STATUS_EMPTY,
+        STORAGE_UNFORMATTED = STORAGE_STATUS_UNFORMATTED,
+        STORAGE_READY = STORAGE_STATUS_READY,
+        STORAGE_NOT_SUPPORTED = STORAGE_STATUS_NOT_SUPPORTED
+    };
+
+    enum ThermalViewMode {
+        THERMAL_OFF = 0,
+        THERMAL_BLEND,
+        THERMAL_FULL,
+        THERMAL_PIP,
+    };
+
     Q_ENUM(CameraMode)
     Q_ENUM(VideoStatus)
     Q_ENUM(PhotoStatus)
     Q_ENUM(PhotoMode)
+    Q_ENUM(StorageStatus)
+    Q_ENUM(ThermalViewMode)
 
     Q_PROPERTY(int          version             READ version            NOTIFY infoChanged)
     Q_PROPERTY(QString      modelName           READ modelName          NOTIFY infoChanged)
@@ -150,11 +167,15 @@ public:
     Q_PROPERTY(Fact*        aperture            READ aperture           NOTIFY parametersReady)
     Q_PROPERTY(Fact*        wb                  READ wb                 NOTIFY parametersReady)
     Q_PROPERTY(Fact*        mode                READ mode               NOTIFY parametersReady)
+    Q_PROPERTY(Fact*        bitRate             READ bitRate            NOTIFY parametersReady)
+    Q_PROPERTY(Fact*        frameRate           READ frameRate          NOTIFY parametersReady)
+    Q_PROPERTY(Fact*        videoEncoding       READ videoEncoding      NOTIFY parametersReady)
 
     Q_PROPERTY(QStringList  activeSettings      READ activeSettings                                 NOTIFY activeSettingsChanged)
     Q_PROPERTY(VideoStatus  videoStatus         READ videoStatus                                    NOTIFY videoStatusChanged)
     Q_PROPERTY(PhotoStatus  photoStatus         READ photoStatus                                    NOTIFY photoStatusChanged)
     Q_PROPERTY(CameraMode   cameraMode          READ cameraMode         WRITE   setCameraMode       NOTIFY cameraModeChanged)
+    Q_PROPERTY(StorageStatus storageStatus      READ storageStatus                                  NOTIFY storageStatusChanged)
     Q_PROPERTY(qreal        photoLapse          READ photoLapse         WRITE   setPhotoLapse       NOTIFY photoLapseChanged)
     Q_PROPERTY(int          photoLapseCount     READ photoLapseCount    WRITE   setPhotoLapseCount  NOTIFY photoLapseCountChanged)
     Q_PROPERTY(PhotoMode    photoMode           READ photoMode          WRITE   setPhotoMode        NOTIFY photoModeChanged)
@@ -162,9 +183,12 @@ public:
     Q_PROPERTY(bool         autoStream          READ autoStream                                     NOTIFY autoStreamChanged)
     Q_PROPERTY(QmlObjectListModel* streams      READ streams                                        NOTIFY streamsChanged)
     Q_PROPERTY(QGCVideoStreamInfo* currentStreamInstance READ currentStreamInstance                 NOTIFY currentStreamChanged)
+    Q_PROPERTY(QGCVideoStreamInfo* thermalStreamInstance READ thermalStreamInstance                 NOTIFY thermalStreamChanged)
     Q_PROPERTY(quint32      recordTime          READ recordTime                                     NOTIFY recordTimeChanged)
     Q_PROPERTY(QString      recordTimeStr       READ recordTimeStr                                  NOTIFY recordTimeChanged)
     Q_PROPERTY(QStringList  streamLabels        READ streamLabels                                   NOTIFY streamLabelsChanged)
+    Q_PROPERTY(ThermalViewMode thermalMode      READ thermalMode        WRITE  setThermalMode       NOTIFY thermalModeChanged)
+    Q_PROPERTY(double       thermalOpacity      READ thermalOpacity     WRITE  setThermalOpacity    NOTIFY thermalOpacityChanged)
 
     Q_INVOKABLE virtual void setVideoMode   ();
     Q_INVOKABLE virtual void setPhotoMode   ();
@@ -206,6 +230,7 @@ public:
     virtual qreal       photoLapse          () { return _photoLapse; }
     virtual int         photoLapseCount     () { return _photoLapseCount; }
     virtual CameraMode  cameraMode          () { return _cameraMode; }
+    virtual StorageStatus storageStatus     () { return _storageStatus; }
     virtual QStringList activeSettings      ();
     virtual quint32     storageFree         () { return _storageFree;  }
     virtual QString     storageFreeStr      ();
@@ -216,6 +241,7 @@ public:
 
     virtual QmlObjectListModel* streams     () { return &_streams; }
     virtual QGCVideoStreamInfo* currentStreamInstance();
+    virtual QGCVideoStreamInfo* thermalStreamInstance();
     virtual int          currentStream      () { return _currentStream; }
     virtual void         setCurrentStream   (int stream);
     virtual bool         autoStream         ();
@@ -229,9 +255,17 @@ public:
     virtual Fact*       aperture            ();
     virtual Fact*       wb                  ();
     virtual Fact*       mode                ();
+    virtual Fact*       bitRate             ();
+    virtual Fact*       frameRate           ();
+    virtual Fact*       videoEncoding       ();
 
     //-- Stream names to show the user (for selection)
-    virtual QStringList          streamLabels       () { return _streamLabels; }
+    virtual QStringList streamLabels        () { return _streamLabels; }
+
+    virtual ThermalViewMode thermalMode     () { return _thermalMode; }
+    virtual void        setThermalMode      (ThermalViewMode mode);
+    virtual double      thermalOpacity      () { return _thermalOpacity; }
+    virtual void        setThermalOpacity   (double val);
 
     virtual void        setZoomLevel        (qreal level);
     virtual void        setFocusLevel       (qreal level);
@@ -264,6 +298,9 @@ public:
     static const char* kCAM_APERTURE;
     static const char* kCAM_WBMODE;
     static const char* kCAM_MODE;
+    static const char* kCAM_BITRATE;
+    static const char* kCAM_FPS;
+    static const char* kCAM_ENC;
 
 signals:
     void    infoChanged                     ();
@@ -282,9 +319,13 @@ signals:
     void    focusLevelChanged               ();
     void    streamsChanged                  ();
     void    currentStreamChanged            ();
+    void    thermalStreamChanged            ();
     void    autoStreamChanged               ();
     void    recordTimeChanged               ();
     void    streamLabelsChanged             ();
+    void    thermalModeChanged              ();
+    void    thermalOpacityChanged           ();
+    void    storageStatusChanged            ();
 
 protected:
     virtual void    _setVideoStatus         (VideoStatus status);
@@ -292,7 +333,8 @@ protected:
     virtual void    _setCameraMode          (CameraMode mode);
     virtual void    _requestStreamInfo      (uint8_t streamID);
     virtual void    _requestStreamStatus    (uint8_t streamID);
-    virtual QGCVideoStreamInfo* _findStream (uint8_t streamID);
+    virtual QGCVideoStreamInfo* _findStream (uint8_t streamID, bool report = true);
+    virtual QGCVideoStreamInfo* _findStream (const QString name);
 
 protected slots:
     virtual void    _initWhenReady          ();
@@ -346,6 +388,7 @@ protected:
     QString                             _vendor;
     QString                             _cacheFile;
     CameraMode                          _cameraMode         = CAM_MODE_UNDEFINED;
+    StorageStatus                       _storageStatus      = STORAGE_NOT_SUPPORTED;
     PhotoMode                           _photoMode          = PHOTO_CAPTURE_SINGLE;
     qreal                               _photoLapse         = 1.0;
     int                                 _photoLapseCount    = 0;
@@ -376,4 +419,6 @@ protected:
     QTimer                              _streamStatusTimer;
     QmlObjectListModel                  _streams;
     QStringList                         _streamLabels;
+    ThermalViewMode                     _thermalMode        = THERMAL_BLEND;
+    double                              _thermalOpacity     = 85.0;
 };

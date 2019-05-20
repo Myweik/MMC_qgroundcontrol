@@ -75,6 +75,7 @@ const char* Vehicle::_distanceToHomeFactName =      "distanceToHome";
 const char* Vehicle::_headingToHomeFactName =       "headingToHome";
 const char* Vehicle::_distanceToGCSFactName =       "distanceToGCS";
 const char* Vehicle::_hobbsFactName =               "hobbs";
+const char* Vehicle::_throttlePctFactName =         "throttlePct";
 
 const char* Vehicle::_gpsFactGroupName =                "gps";
 const char* Vehicle::_battery1FactGroupName =           "battery";
@@ -204,6 +205,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _headingToHomeFact    (0, _headingToHomeFactName,     FactMetaData::valueTypeDouble)
     , _distanceToGCSFact    (0, _distanceToGCSFactName,     FactMetaData::valueTypeDouble)
     , _hobbsFact            (0, _hobbsFactName,             FactMetaData::valueTypeString)
+    , _throttlePctFact      (0, _throttlePctFactName,       FactMetaData::valueTypeUint16)
     , _gpsFactGroup(this)
     , _battery1FactGroup(this)
     , _battery2FactGroup(this)
@@ -407,6 +409,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _headingToHomeFact    (0, _headingToHomeFactName,     FactMetaData::valueTypeDouble)
     , _distanceToGCSFact    (0, _distanceToGCSFactName,     FactMetaData::valueTypeDouble)
     , _hobbsFact            (0, _hobbsFactName,             FactMetaData::valueTypeString)
+    , _throttlePctFact      (0, _throttlePctFactName,       FactMetaData::valueTypeUint16)
     , _gpsFactGroup(this)
     , _battery1FactGroup(this)
     , _battery2FactGroup(this)
@@ -480,6 +483,7 @@ void Vehicle::_commonInit(void)
     _addFact(&_distanceToHomeFact,      _distanceToHomeFactName);
     _addFact(&_headingToHomeFact,       _headingToHomeFactName);
     _addFact(&_distanceToGCSFact,       _distanceToGCSFactName);
+    _addFact(&_throttlePctFact,         _throttlePctFactName);
 
     _hobbsFact.setRawValue(QVariant(QString("0000:00:00")));
     _addFact(&_hobbsFact,               _hobbsFactName);
@@ -508,8 +512,7 @@ void Vehicle::_commonInit(void)
     _flightTimeFact.setRawValue(0);
 
     // Set video stream to udp if running ArduSub and Video is disabled
-    if (sub() && _settingsManager->videoSettings()->videoSource()->rawValue() == VideoSettings::videoDisabled)
-    {
+    if (sub() && _settingsManager->videoSettings()->videoSource()->rawValue() == VideoSettings::videoDisabled) {
         _settingsManager->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceUDP);
     }
 
@@ -950,6 +953,7 @@ void Vehicle::_handleVfrHud(mavlink_message_t& message)
     _airSpeedFact.setRawValue(qIsNaN(vfrHud.airspeed) ? 0 : vfrHud.airspeed);
     _groundSpeedFact.setRawValue(qIsNaN(vfrHud.groundspeed) ? 0 : vfrHud.groundspeed);
     _climbRateFact.setRawValue(qIsNaN(vfrHud.climb) ? 0 : vfrHud.climb);
+    _throttlePctFact.setRawValue(vfrHud.throttle);
 }
 
 void Vehicle::_handleEstimatorStatus(mavlink_message_t& message)
@@ -3328,6 +3332,12 @@ void Vehicle::_handleCommandAck(mavlink_message_t& message)
         // FIXME: Is this missing here. I believe it is a bug. Debug to verify. May need to go into Stable.
         //_startPlanRequest();
     }
+
+#if !defined(NO_ARDUPILOT_DIALECT)
+    if (ack.command == MAV_CMD_FLASH_BOOTLOADER && ack.result == MAV_RESULT_ACCEPTED) {
+        qgcApp()->showMessage(tr("Bootloader flash succeeded"));
+    }
+#endif
 
     if (_mavCommandQueue.count() && ack.command == _mavCommandQueue[0].command) {
         _mavCommandAckTimer.stop();

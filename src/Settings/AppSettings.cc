@@ -46,7 +46,7 @@ DECLARE_SETTINGGROUP(App, "")
     if (savePathFact->rawValue().toString().isEmpty() && _nameToMetaDataMap[savePathName]->rawDefaultValue().toString().isEmpty()) {
 #ifdef __mobile__
 #ifdef __ios__
-        QDir rootDir = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+        QDir rootDir = QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 #else
         QDir rootDir = QDir(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation));
 #endif
@@ -78,6 +78,7 @@ DECLARE_SETTINGSFACT(AppSettings, telemetrySave)
 DECLARE_SETTINGSFACT(AppSettings, telemetrySaveNotArmed)
 DECLARE_SETTINGSFACT(AppSettings, audioMuted)
 DECLARE_SETTINGSFACT(AppSettings, virtualJoystick)
+DECLARE_SETTINGSFACT(AppSettings, virtualJoystickCentralized)
 DECLARE_SETTINGSFACT(AppSettings, appFontPointSize)
 DECLARE_SETTINGSFACT(AppSettings, showLargeCompass)
 DECLARE_SETTINGSFACT(AppSettings, savePath)
@@ -127,7 +128,6 @@ void AppSettings::_checkSavePathDirectories(void)
 
 void AppSettings::_indoorPaletteChanged(void)
 {
-    qgcApp()->_loadCurrentStyleSheet();
     QGCPalette::setGlobalTheme(indoorPalette()->rawValue().toBool() ? QGCPalette::Dark : QGCPalette::Light);
 }
 
