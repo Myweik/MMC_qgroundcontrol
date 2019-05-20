@@ -441,7 +441,7 @@ QGCView {
 //                source:       /*visible ? */"qrc:/ffmpeg/VLCView.qml"/*:""*/
                 Timer {
                     id: ffmpegTimer
-                    interval : 15000
+                    interval : 1000
                     repeat : false
                     running : false
                     triggeredOnStart : false

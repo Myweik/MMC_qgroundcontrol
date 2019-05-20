@@ -19,6 +19,8 @@ public :
     ~UsbExampleTask(){}
     enum UsbExampleTaskCommand{
         UsbExampleTaskCommand_Read,
+        UsbExampleTaskCommand_ReadyRead,
+
     };
     UsbExampleTask(UsbExample *codec,UsbExampleTaskCommand command,double param = 0,QString param2 = ""):
         mCodec(codec),command(command),param(param),param2(param2){}
@@ -49,6 +51,7 @@ public:
     void write(QByteArray *buf);
 
     void addReadTask();
+    void addReadyReadTask();
 
     void ProcessVideoRead(unsigned char* buf,int len);
 public slots:
@@ -61,11 +64,13 @@ private:
     QUsbDevice *m_usb_dev;
     QUsbTransfer *m_transfer_handler;
     QByteArray m_send, m_recv;
+    QMutex m_recvMutex;
     QUsbDevice::Id m_filter;
     QUsbDevice::Config m_config;
     QUsbDevice::Endpoint m_read_ep, m_write_ep;
 
     AVThread mReadUsbThread;
+    AVThread mReadyReadThread;
 };
 //extern HidThread *hidThread;
 extern QMutex usb_byte_fifo_mutex;

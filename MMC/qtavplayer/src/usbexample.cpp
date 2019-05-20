@@ -16,6 +16,9 @@ void UsbExampleTask::run()
     case UsbExampleTaskCommand_Read:
         mCodec->readUsb();
         break;
+    case UsbExampleTaskCommand_ReadyRead:
+        mCodec->onReadyRead();
+        break;
     }
 }
 
@@ -53,7 +56,7 @@ void UsbExample::setupDevice()
    */
     qDebug("setupDevice");
 
-    m_usb_dev->setLogLevel(QUsbDevice::logDebug);
+    m_usb_dev->setLogLevel(QUsbDevice::logNone);
 
     // desc.idProduct == 0xAA97 && desc.idVendor == 0xAAAA
     m_filter.pid = 0xAA97;
@@ -98,7 +101,9 @@ bool UsbExample::openHandle()
     bool b = false;
     m_transfer_handler = new QUsbTransfer(m_usb_dev, QUsbTransfer::bulkTransfer, m_read_ep, m_write_ep);
 
-    connect(m_transfer_handler, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+
+//    connect(m_transfer_handler, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(m_transfer_handler, /*SIGNAL(readyRead())*/ &QUsbTransfer::readyRead, this, &UsbExample::addReadyReadTask);
     connect(m_transfer_handler, SIGNAL(bytesWritten(qint64)), this, SLOT(onWriteComplete(qint64)));
 
     b = m_transfer_handler->open(QIODevice::ReadWrite);
@@ -115,13 +120,32 @@ void UsbExample::addReadTask()
     mReadUsbThread.addTask(new UsbExampleTask(this,UsbExampleTask::UsbExampleTaskCommand_Read));
 }
 
+void UsbExample::addReadyReadTask()
+{
+    if(mReadyReadThread.size() < 3)
+        mReadyReadThread.addTask(new UsbExampleTask(this,UsbExampleTask::UsbExampleTaskCommand_ReadyRead));
+}
+
 void UsbExample::readUsb()
 {
     if (m_transfer_handler) {
         m_transfer_handler->poll();
     }
-    QThread::msleep(3);
+//    QThread::msleep(3);
     addReadTask();
+}
+
+void UsbExample::onReadyRead()
+{
+    m_recvMutex.lock();
+    this->read(&m_recv);
+//    qDebug() << "onReadyRead" << m_recv.size();
+    if(m_recv.size() > 0){
+        ProcessVideoRead((uchar*)m_recv.data(), m_recv.size());
+         m_recv.clear();
+    }
+    m_recvMutex.unlock();
+    QThread::usleep(1);
 }
 
 void UsbExample::closeHandle()
@@ -156,24 +180,10 @@ void UsbExample::write(QByteArray *buf)
 
 void UsbExample::ProcessVideoRead(unsigned char *buf, int len)
 {
-//    int fifoactsize=0;
-//    usb_byte_fifo_mutex.lock();
-
     g_fifo->write(buf,len);
-
-//    usb_byte_fifo_mutex.unlock();
 }
 
-void UsbExample::onReadyRead()
-{
-    this->read(&m_recv);
-    qDebug() << "onReadyRead" << m_recv.size();
-    if(m_recv.size() > 0){
-        ProcessVideoRead((uchar*)m_recv.data(), m_recv.size());
-         m_recv.clear();
-    }
-//    this->write(&m_send);
-}
+
 
 void UsbExample::onWriteComplete(qint64 bytes)
 {

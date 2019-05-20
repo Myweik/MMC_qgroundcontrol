@@ -499,27 +499,20 @@ void AVDecoder::init(){
 
 static int readRawDataCB(void *opaque, uint8_t *buf, int buf_size)
 {
-    /*static */qint64 lastTime2 = QDateTime::currentMSecsSinceEpoch();
+    (void)opaque; (void)buf_size;
     int len = -1;
     while(len < 1)
     {
-//        usb_byte_fifo_mutex.lock();
         len = g_fifo->read(buf);
-//        usb_byte_fifo_mutex.unlock();
-        QThread::msleep(1);
+        QThread::usleep(1);
     }
-//    qDebug() <<"-------------------------readRawDataCB" << QDateTime::currentMSecsSinceEpoch() - lastTime2 << g_fifo->size() << len ;
-    lastTime2 = QDateTime::currentMSecsSinceEpoch();
     return (-1 == len)?AVERROR(errno) :len;
 }
 
 void AVDecoder::init2(){
     QMutexLocker locker(&mDeleteMutex);
 
-//    usb_byte_fifo_mutex.lock();
     g_fifo->clear();
-//    usb_byte_fifo_mutex.unlock();
-
     if(mIsInit)
         return;
     mIsInit = true;
@@ -531,7 +524,7 @@ void AVDecoder::init2(){
     mFormatCtx->interrupt_callback.opaque = this;
 
     uint8_t  *avio_ctx_buffer = NULL;
-    size_t avio_ctx_buffer_size = 327680;// 3072;// 32768;
+    size_t avio_ctx_buffer_size = 1024000 /*327680*/;// 3072;// 32768;
     AVIOContext *avio_ctx = NULL;
     AVInputFormat *pAVInputFmt = NULL;
     int ret;
@@ -589,10 +582,7 @@ void AVDecoder::init2(){
         return;
     }
 
-
-
-
-
+/*
     AVCodecParameters *pCodecPar = mFormatCtx->streams[AVMEDIA_TYPE_VIDEO]->codecpar; //查找解码器
     //获取一个合适的编码器pCodec find a decoder for the video stream
     // AVCodec *pCodec = avcodec_find_decoder(pCodecPar->codec_id);
@@ -603,7 +593,6 @@ void AVDecoder::init2(){
         if (pCodec == NULL) {
 
             qDebug("Couldn't find Codec.\n");
-//            return -1;
         }
         break;
     case AV_CODEC_ID_MPEG4:
@@ -611,26 +600,23 @@ void AVDecoder::init2(){
         if (pCodec == NULL) {
 
             qDebug("Couldn't find Codec.\n");
-//            return -1;
         } break;
     case AV_CODEC_ID_HEVC:
         pCodec = avcodec_find_decoder_by_name("hevc_mediacodec");//硬解码265
         if (pCodec == NULL) {
             qDebug("Couldn't find Codec.\n");
-//            return -1;
         }
         break;
     default:
         pCodec = avcodec_find_decoder(pCodecPar->codec_id);//软解
         if (pCodec == NULL) {
             qDebug("Couldn't find Codec.\n");
-//            return -1;
         }
         break;
     }
-
 //    mVideoCodec = avcodec_find_decoder_by_name("h264_mediacodec");
     qDebug() << "--------------mVideoCodec" << pCodecPar->codec_id << pCodec;
+    */
 
     mVideoCodec =  avcodec_find_decoder(AV_CODEC_ID_H264); //zhi jie fa xian
     if (!mVideoCodec) {
