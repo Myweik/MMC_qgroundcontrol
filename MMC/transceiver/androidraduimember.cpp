@@ -74,7 +74,12 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
         memcpy(&tep, buff, sizeof(ushort));
         this->set_channel14(tep);
         buff += 2;
-
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel15(tep);
+        buff += 2;
+        memcpy(&tep, buff, sizeof(ushort));
+        this->set_channel16(tep);
+        buff += 2;
         break;
         }
     case 0x04:{  //遥控器校准时各通道值

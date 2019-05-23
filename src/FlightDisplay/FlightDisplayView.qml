@@ -457,7 +457,7 @@ Item {
 //                source:       /*visible ? */"qrc:/ffmpeg/VLCView.qml"/*:""*/
                 Timer {
                     id: ffmpegTimer
-                    interval : 1000
+                    interval : 500
                     repeat : false
                     running : false
                     triggeredOnStart : false

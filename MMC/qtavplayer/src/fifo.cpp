@@ -19,13 +19,25 @@ usbfifo::~usbfifo(void)
 void usbfifo::write(unsigned char *buf, int length)
 {
 //    qDebug() << "-------------------------usbfifo::write" << length << _buffQurue->size();
-    QByteArray* buff = new QByteArray;
-    buff->resize(length);
-    memcpy(buff->data(), buf, static_cast<ulong>(length));
 
-    _usbByteMutex.lock();
-    _buffQurue->put(buff);
-    _usbByteMutex.unlock();
+    while (length != 0) {
+        QByteArray* buff = new QByteArray;
+        if(length > 102400){
+            buff->resize(102400);
+            memcpy(buff->data(), buf, static_cast<ulong>(102400));
+            buf += 102400;
+            length -= 102400;
+        }else{
+            buff->resize(length);
+            memcpy(buff->data(), buf, static_cast<ulong>(length));
+            buf += length;
+            length = 0;
+        }
+
+        _usbByteMutex.lock();
+        _buffQurue->put(buff);
+        _usbByteMutex.unlock();
+    }
 }
 
 int usbfifo::read(unsigned char *buf)

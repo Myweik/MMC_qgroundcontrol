@@ -504,7 +504,7 @@ static int readRawDataCB(void *opaque, uint8_t *buf, int buf_size)
     while(len < 1)
     {
         len = g_fifo->read(buf);
-        QThread::usleep(1);
+        QThread::usleep(100);
     }
     return (-1 == len)?AVERROR(errno) :len;
 }
@@ -524,7 +524,7 @@ void AVDecoder::init2(){
     mFormatCtx->interrupt_callback.opaque = this;
 
     uint8_t  *avio_ctx_buffer = NULL;
-    size_t avio_ctx_buffer_size = 1024000 /*327680*/;// 3072;// 32768;
+    size_t avio_ctx_buffer_size =/* 1024000 */327680;// 3072;// 32768;
     AVIOContext *avio_ctx = NULL;
     AVInputFormat *pAVInputFmt = NULL;
     int ret;

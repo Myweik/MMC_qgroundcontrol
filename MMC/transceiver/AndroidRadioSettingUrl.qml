@@ -29,7 +29,7 @@ import QGroundControl.SettingsManager       1.0
 
 /*QGCView*/Rectangle {
     id:                 _qgcView
-//    viewPanel:          panel
+    //    viewPanel:          panel
     color:              qgcPal.window
     anchors.fill:       parent
     anchors.margins:    ScreenTools.defaultFontPixelWidth
@@ -124,7 +124,7 @@ import QGroundControl.SettingsManager       1.0
         }
     }
 
-    /*QGCViewPanel*/ Item {
+    Item {
         id:             panel
         anchors.fill:   parent
         QGCFlickable {
@@ -132,6 +132,7 @@ import QGroundControl.SettingsManager       1.0
             anchors.fill:       parent
             contentHeight:      settingsColumn.height
             contentWidth:       settingsColumn.width
+
             Column {
                 id:                 settingsColumn
                 width:              _qgcView.width
@@ -156,20 +157,67 @@ import QGroundControl.SettingsManager       1.0
                     color:                      qgcPal.windowShade
                     anchors.margins:            ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter:   parent.horizontalCenter
+
                     Row {
                         id:                 generalRow
                         spacing:            ScreenTools.defaultFontPixelWidth * 4
                         anchors.centerIn:   parent
 
+
+
                         Column {
-                            width:      ScreenTools.defaultFontPixelWidth
                             spacing:    10
+
+                            /* 充电状态，0为不充电，1为充电中 */
+                            /* 电池电量剩余时间 */
+                            /* 电池健康状态 */
+                            /* 电池温度 */
+                            /* 遥控器开关-是否发送数据给飞控 */
+                            /* 遥控器模式，左手模式或者右手模式 */
+                            /* 遥控器校准状态 */
+                            /* 版本号 */
+                            QGCLabel { text: radioMember.chargeStateComment + ": " +  radioMember.chargeState }
+                            QGCLabel { text: "voltage: " + radioMember.voltage }
+                            QGCLabel { text: "energy: " + radioMember.energy }
+                            QGCLabel { text: radioMember.timeComment + ": " +  radioMember.time }
+                            QGCLabel { text: radioMember.stateOfHealthComment + ": " +  radioMember.stateOfHealth }
+                            QGCLabel { text: radioMember.temperatureComment + ": " +  radioMember.temperature }
+                            //                                QGCLabel { text: radioMember.rockerStateComment + ": " +  radioMember.rockerState }
+                            QGCLabel { text: radioMember.rcModeComment + ": " +  radioMember.rcMode }
+                            QGCLabel { text: radioMember.calirationStateComment + ": " +  radioMember.calirationState }
+
+                            QGCLabel { text: radioMember.verComment + ": " +  radioMember.ver }
+
+                            Row{
+                                visible:            true
+                                spacing:  20
+                                QGCRadioButton {
+                                    text:               qsTr("Left Model", "左手模式")
+                                    checked:            radioMember.rcMode === 0x05
+                                    onClicked: {
+                                        console.log("--------------------Left Model")
+                                        if(checked)
+                                            radioMember.setCalirationState(true)
+                                    }
+                                }
+
+                                QGCRadioButton {
+                                    text:               qsTr("Right Model", "右手模式")
+                                    checked:            radioMember.rcMode === 0x0A
+                                    onClicked: {
+                                        console.log("--------------------Right Model")
+                                        if(checked)
+                                            radioMember.setCalirationState(false)
+                                    }
+                                }
+                            }
 
                             Column {
                                 Row{
+                                    spacing:  10
                                     QGCButton {
                                         visible: 6 <= radioMember.checkStatus || radioMember.checkStatus <= 1
-                                        text: qsTr("校准")
+                                        text: qsTr("Calibration", "校准")
                                         width: 70 * ScreenTools.widgetScale
                                         enabled: true
                                         onClicked: {
@@ -177,14 +225,14 @@ import QGroundControl.SettingsManager       1.0
                                         }
                                     }
                                     QGCLabel {
-                                        text: radioMember.calirationState ? qsTr("(已校准)") : qsTr("(未校准)")
+                                        text: radioMember.calirationState ? qsTr("(OK)", "(已校准)") : qsTr("(NG)", "(未校准)")
                                         color : radioMember.calirationState ? "#0f0" : "#f00"
                                     }
                                 }
 
                                 QGCButton {
                                     visible: 1 < radioMember.checkStatus && radioMember.checkStatus <= 3
-                                    text: qsTr("下一步")
+                                    text: qsTr("Next", "下一步")
                                     width: 70 * ScreenTools.widgetScale
                                     enabled: true
                                     onClicked: {
@@ -194,17 +242,17 @@ import QGroundControl.SettingsManager       1.0
 
                                 QGCButton {
                                     visible: 3 < radioMember.checkStatus && radioMember.checkStatus <= 5
-                                    text: qsTr("下一步")
+                                    text: qsTr("Next", "下一步")
                                     width: 70 * ScreenTools.widgetScale
                                     enabled: true
                                     onClicked: {
                                         radioMember.sendCheckStatus()
                                     }
                                 }
-                                QGCLabel { visible: radioMember.checkStatus === 2;   text: qsTr("请保持摇杆相对禁止，当Mid不变时，点击下一步")}
-                                QGCLabel { visible: radioMember.checkStatus === 4;   text: qsTr("请最大限制的拨动摇杆，当Min、max不变时，点击下一步") }
-                                QGCLabel { visible: radioMember.checkStatus === 255; text: qsTr("校准失败") }
-                                QGCLabel { visible: radioMember.checkStatus === 6;   text: qsTr("校准完成") }
+                                QGCLabel { visible: radioMember.checkStatus === 2;   text: qsTr("Keep the rocker relatively banned. When Mid remains unchanged, click Next", "请保持摇杆相对禁止，当Mid不变时，点击下一步")}
+                                QGCLabel { visible: radioMember.checkStatus === 4;   text: qsTr("Turn the rocker to the maximum limit. When Min and Max remain unchanged, click Next.", "请最大限制的拨动摇杆，当Min、max不变时，点击下一步") }
+                                QGCLabel { visible: radioMember.checkStatus === 255; text: qsTr("Calibration failed", "校准失败") }
+                                QGCLabel { visible: radioMember.checkStatus === 6;   text: qsTr("Calibration completed", "校准完成") }
                             }
 
                             Column {
@@ -235,54 +283,10 @@ import QGroundControl.SettingsManager       1.0
                                 }
                             }
 
+                        }
 
-                            /* 充电状态，0为不充电，1为充电中 */
-                            /* 电池电量剩余时间 */
-                            /* 电池健康状态 */
-                            /* 电池温度 */
-                            /* 遥控器开关-是否发送数据给飞控 */
-                            /* 遥控器模式，左手模式或者右手模式 */
-                            /* 遥控器校准状态 */
-                            /* 版本号 */
-                            QGCLabel { text: radioMember.chargeStateComment + ": " +  radioMember.chargeState }
-                            QGCLabel { text: "voltage: " + radioMember.voltage }
-                            QGCLabel { text: "energy: " + radioMember.energy }
-                            QGCLabel { text: radioMember.timeComment + ": " +  radioMember.time }
-                            QGCLabel { text: radioMember.stateOfHealthComment + ": " +  radioMember.stateOfHealth }
-                            QGCLabel { text: radioMember.temperatureComment + ": " +  radioMember.temperature }
-                            //                                QGCLabel { text: radioMember.rockerStateComment + ": " +  radioMember.rockerState }
-                            QGCLabel { text: radioMember.rcModeComment + ": " +  radioMember.rcMode }
-                            QGCLabel { text: radioMember.calirationStateComment + ": " +  radioMember.calirationState }
-
-                            QGCLabel { text: radioMember.verComment + ": " +  radioMember.ver }
-
-                            ExclusiveGroup { id: fenceActionRadioGroup }
-                            Row{
-                                visible:            true
-                                spacing:  20
-                                QGCRadioButton {
-                                    text:               qsTr("Left Model", "左手模式")
-//                                    exclusiveGroup:     fenceActionRadioGroup
-                                    checked:            radioMember.rcMode === 0x05
-                                    onClicked: {
-                                        console.log("--------------------Left Model")
-                                        if(checked)
-                                            radioMember.setCalirationState(true)
-                                    }
-                                }
-
-                                QGCRadioButton {
-                                    text:               qsTr("Right Model", "右手模式")
-//                                    exclusiveGroup:     fenceActionRadioGroup
-                                    checked:            radioMember.rcMode === 0x0A
-                                    onClicked: {
-                                        console.log("--------------------Right Model")
-                                        if(checked)
-                                            radioMember.setCalirationState(false)
-                                    }
-                                }
-                            }
-
+                        Column {
+                            spacing:    10
                             QGCLabel { text: qsTr("Channel Monitor") }
                             Loader {
                                 property int channel : radioMember.channel1
@@ -292,6 +296,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel1Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -303,6 +308,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel2Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -314,6 +320,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel3Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -325,6 +332,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel4Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -336,6 +344,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel5Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -347,6 +356,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel6Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -358,6 +368,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel7Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -369,6 +380,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel8Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -380,6 +392,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel9Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -391,6 +404,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel10Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -402,6 +416,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel11Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -413,6 +428,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel12Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -424,6 +440,7 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel13Comment
+                                    item.channel = channel
                                 }
                             }
 
@@ -435,10 +452,32 @@ import QGroundControl.SettingsManager       1.0
                                 onChannelChanged: item.channel = channel
                                 Component.onCompleted: {
                                     item.text = radioMember.channel14Comment
+                                    item.channel = channel
                                 }
                             }
 
-
+                            Loader {
+                                property int channel : radioMember.channel15
+                                height:                 20
+                                width:                  500
+                                sourceComponent:        monitorColumn
+                                onChannelChanged: item.channel = channel
+                                Component.onCompleted: {
+                                    item.text = radioMember.channel15Comment
+                                    item.channel = channel
+                                }
+                            }
+                            Loader {
+                                property int channel : radioMember.channel16
+                                height:                 20
+                                width:                  500
+                                sourceComponent:        monitorColumn
+                                onChannelChanged: item.channel = channel
+                                Component.onCompleted: {
+                                    item.text = radioMember.channel16Comment
+                                    item.channel = channel
+                                }
+                            }
                         }
                     }
                 }

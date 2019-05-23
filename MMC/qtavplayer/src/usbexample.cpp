@@ -139,8 +139,9 @@ void UsbExample::onReadyRead()
 {
     m_recvMutex.lock();
     this->read(&m_recv);
-//    qDebug() << "onReadyRead" << m_recv.size();
+
     if(m_recv.size() > 0){
+//        qDebug() << "onReadyRead" << m_recv.size();
         ProcessVideoRead((uchar*)m_recv.data(), m_recv.size());
          m_recv.clear();
     }
