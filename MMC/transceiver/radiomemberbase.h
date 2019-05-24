@@ -53,8 +53,8 @@ class RadioMemberBase : public QObject
     MMC_GENERATE_QML_PROPERTY(channel11, int, "Zoom")
     MMC_GENERATE_QML_PROPERTY(channel12, int, "Photo")
     MMC_GENERATE_QML_PROPERTY(channel13, int, "Video")
-    MMC_GENERATE_QML_PROPERTY(channel14, int, "channel14")
-    MMC_GENERATE_QML_PROPERTY(channel15, int, "channel15")
+    MMC_GENERATE_QML_PROPERTY(channel14, int, "F2")
+    MMC_GENERATE_QML_PROPERTY(channel15, int, "F3")
     MMC_GENERATE_QML_PROPERTY(channel16, int, "channel16")
 
     /* 原始通道 1-4 */
