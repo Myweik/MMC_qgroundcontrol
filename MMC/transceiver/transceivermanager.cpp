@@ -25,6 +25,8 @@ TransceiverManager::TransceiverManager(QGCApplication *app, QGCToolbox *toolbox)
 //        QTimer::singleShot(1, this, SLOT(onStartTimer()));
 //    }
 #endif
+
+    _fpvMember = new FpvMember(this);
 }
 
 

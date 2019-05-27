@@ -2776,6 +2776,10 @@ void Vehicle::_linkActiveChanged(LinkInterface *link, bool active, int vehicleID
             communicationRegained = true;
             emit connectionLostChanged(false);
 
+            //send init Vehicle  _ By_mw 20190305
+            qDebug() << "_________----_firmwarePlugin->initializeVehicle";
+            _firmwarePlugin->initializeVehicle(this);
+
             if (_priorityLink->highLatency()) {
                 _setMaxProtoVersion(100);
             } else {
@@ -2821,6 +2825,7 @@ void Vehicle::_linkActiveChanged(LinkInterface *link, bool active, int vehicleID
             qgcApp()->showMessage(tr("Communication regained to vehicle %1").arg(_id));
         }
     }
+
     if (communicationLost) {
         commSpeech = tr("Communication lost");
         if (_links.count() > 1) {

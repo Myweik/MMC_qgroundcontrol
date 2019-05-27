@@ -66,16 +66,17 @@ int RadioProvider::openSerial(QString name)
         return -1;
     }
 
+#if !defined(Q_OS_ANDROID)
     if (_serial->isOpen()) {
         //查询一次电台 -- 通过接受判断是否为该电台 -- 相当于握手(查询ID)
         char type = 0x8f;
         char buff[1] = {0x01};
         writeData(type, QByteArray(buff, 1));
     }
+#endif
 
-    qDebug() << "=======================================openSerial" << name;
     result = 0;
-    return 0;
+    return result;
 }
 
 void RadioProvider::openSerialSlot()

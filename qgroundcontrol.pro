@@ -1263,5 +1263,5 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
         /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswresample-2.so \
         /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale-4.so \
         /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavcodec-57.so \
-        $$PWD/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavdevice-57.so
+        /home/xuan/src/kinxinxiaobawang/qgroundcontrol/MMC/qtavplayer/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavdevice-57.so \
 }

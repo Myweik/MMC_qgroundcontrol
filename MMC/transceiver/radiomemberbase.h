@@ -49,7 +49,7 @@ class RadioMemberBase : public QObject
     MMC_GENERATE_QML_PROPERTY(channel7,  int, "RTL")
     MMC_GENERATE_QML_PROPERTY(channel8,  int, "channel8")
     MMC_GENERATE_QML_PROPERTY(channel9,  int, "MountPich")
-    MMC_GENERATE_QML_PROPERTY(channel10,  int, "MountYaw")
+    MMC_GENERATE_QML_PROPERTY(channel10, int, "MountYaw")
     MMC_GENERATE_QML_PROPERTY(channel11, int, "Zoom")
     MMC_GENERATE_QML_PROPERTY(channel12, int, "Photo")
     MMC_GENERATE_QML_PROPERTY(channel13, int, "Video")

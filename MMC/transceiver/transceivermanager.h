@@ -6,9 +6,9 @@
 #include "radiomember.h"
 #include "radioprovider.h"
 #include "androidraduimember.h"
+#include "../fpv/fpvmember.h"
 
 #include <QGCToolbox.h>
-
 #include <QString>
 #include <QObject>
 
@@ -49,6 +49,8 @@ private:
 
     RadioProvider*   _radioProvider = nullptr;
     RadioMemberBase* _radioMember   = nullptr;
+
+    FpvMember*      _fpvMember      = nullptr;
 
 //    std::atomic_bool _requestRadioStop; ///< signals the thread to quit
     bool _isconnect = false;
