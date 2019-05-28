@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="Plug/">
+        <file>video.vert</file>
+        <file>packed.frag</file>
+        <file>planar.frag</file>
+    </qresource>
+</RCC>

@@ -69,6 +69,7 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
 #if defined(QGC_GST_TAISYNC_ENABLED)
     _taisyncManager         = toolbox->taisyncManager();
 #endif
+    _transceiverManager     = toolbox->transceiverManager();
 }
 
 void QGroundControlQmlGlobal::saveGlobalSetting (const QString& key, const QString& value)

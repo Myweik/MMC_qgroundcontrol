@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>拍照</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-8.2%" y="-1.9%" width="116.4%" height="105.9%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-Copy-4" transform="translate(-1225.000000, -294.000000)">
+            <g id="挂载-copy-7" filter="url(#filter-1)" transform="translate(1205.000000, 90.000000)">
+                <g id="Group-4" transform="translate(20.000000, 113.000000)">
+                    <g id="Group-6" transform="translate(0.000000, 24.000000)">
+                        <g id="Group-7">
+                            <g id="拍照" transform="translate(0.000000, 67.000000)">
+                                <rect id="Rectangle-3" fill="#D8D8D8" fill-rule="nonzero" opacity="0" x="0" y="0" width="32" height="32"></rect>
+                                <path d="M18.0039563,13.7304006 C15.851366,13.7304006 14.1062323,15.5108211 14.1062323,17.7071573 C14.1062323,19.9034934 15.8514836,21.6537328 18.0039563,21.6537328 C20.1565467,21.6537328 21.8599698,19.9034934 21.8599698,17.7071573 C21.8599698,15.5108211 20.1565467,13.7304006 18.0039563,13.7304006 Z M25.9050925,9.36782004 L22.7325367,9.36782004 C21.8880024,8.27077035 20.9067471,7 20.8930691,7 L13.9736294,7 C13.9574512,7 12.9656065,8.27077035 12.1124536,9.36782004 L6.09490753,9.36782004 C4.93772107,9.36782004 4,10.3185567 4,11.4918049 L4,23.8761643 C4,25.0493827 4.93772107,26 6.09490753,26 L25.9050925,26 C27.0622789,26 28,25.0493827 28,23.8761643 L28,11.4918049 C28,10.3185567 27.0622789,9.36782004 25.9050925,9.36782004 Z M9.26631614,14.7465994 C8.60747877,14.7465994 8.07374343,14.2054856 8.07374343,13.5380702 C8.07374343,12.8700882 8.60747877,12.3289446 9.26631614,12.3289446 C9.92459462,12.3289446 10.45833,12.8700882 10.45833,13.5380702 C10.45833,14.2054856 9.92459462,14.7465994 9.26631614,14.7465994 Z M18.0696694,23.0169851 C15.1725264,23.0169851 12.7371695,20.6207435 12.7371695,17.6654643 C12.7371695,14.7095588 15.1725264,12.3139137 18.0696694,12.3139137 C20.9662536,12.3139137 23.2856859,14.7095588 23.2856859,17.6654643 C23.2856859,20.6207435 20.9662536,23.0169851 18.0696694,23.0169851 Z" fill="#9BACBE" fill-rule="evenodd"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

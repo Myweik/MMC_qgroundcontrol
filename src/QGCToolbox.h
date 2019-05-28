@@ -36,6 +36,7 @@ class AirspaceManager;
 #if defined(QGC_GST_TAISYNC_ENABLED)
 class TaisyncManager;
 #endif
+class TransceiverManager;
 
 /// This is used to manage all of our top level services/tools
 class QGCToolbox : public QObject {
@@ -67,6 +68,7 @@ public:
 #if defined(QGC_GST_TAISYNC_ENABLED)
     TaisyncManager*             taisyncManager          () { return _taisyncManager; }
 #endif
+    TransceiverManager*         transceiverManager      () { return _transceiverManager; }
 
 private:
     void setChildToolboxes(void);
@@ -97,6 +99,7 @@ private:
 #if defined(QGC_GST_TAISYNC_ENABLED)
     TaisyncManager*             _taisyncManager         = nullptr;
 #endif
+    TransceiverManager*         _transceiverManager     = nullptr;
     friend class QGCApplication;
 };
 

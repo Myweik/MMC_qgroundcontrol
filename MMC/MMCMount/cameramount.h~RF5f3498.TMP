@@ -1,0 +1,254 @@
+﻿#ifndef CAMERAMOUNT_H
+#define CAMERAMOUNT_H
+
+#include <QObject>
+#include "mountinfo.h"
+
+typedef struct CameraParameter{
+    uint8_t zoomValue, videoStatu, photoState, mode, hasError, colorPlate, frame; //变焦倍数  、录像状态 、是否拍照、云台模式、 是否异常、 红外色板、 高清双光正图、
+} Camera_Parameter;
+
+class CameraMount : public MountInfo
+{
+    Q_OBJECT
+public:
+    typedef enum CAM_TYPE
+    {
+        CAM_10=267,//10倍云台
+        CAM_SONGXIA20=283,//20倍松下云台
+        CAM_PG2IF1_LS1Z20=523,//高清双光 20b
+        CAM_SONY20=299,//20倍索尼云台
+        CAM_QIWA30=315,//30倍奇蛙云台
+        CAM_GOPRO5=331,//Gopro5云台
+        CAM_BIFOCAL10=347,//10倍红外双光云台
+        CAM_SMALLBIFOCAL=363,//小双光
+        CAM_LLL18=379,//18倍微光
+        CAM_LLLFLOW35=395,//35倍微光带跟踪
+        CAM_5100=411,//5100云台
+        CAM_A7R=427,//A7R云台
+        CAM_Filr=443,//Filr红外
+        CAM_F1T2FOCAL=475,//微光红外二合一短款
+        CAM_PGIY1=491,//海视英科红外
+        CAM_PG2IF2_LT2Z35=507,//微光红外二合一长款
+    } CAM_TYPE;
+    // 挂载上传上行指令
+    typedef enum CAM_UPDATA_TYPE
+    {
+        CAM_UP_CAMINFO=1,       //相机信息反馈
+        CAM_UP_ANGINFO=2,       //云台角度反馈
+        CAM_UP_ERRINFO=3,       //普通错误反馈
+        CAM_UP_PHOTOINFO=4,     //拍照反馈
+        CAM_UP_ZOOMINFO=5,      //变焦反馈
+        CAM_UP_ERR_PARAM=6,     //带参数错误
+        CAM_UP_PIDINFO=7,       //云台PID参数反馈
+        CAM_UP_PIDCHANGE=8,     //修改PID参数反馈
+        CAM_UP_PIDWRITE=9,      //写入PID参数反馈
+        CAM_UP_TRANSDATA=10,    //透传指令信息
+        CAM_UP_REQUESTTIME=11,  //请求时间
+        CAM_UP_TEMINFO=0x0C,    //温度信息反馈
+    } CAM_UPDATA_TYPE;
+    // 控制挂载指令
+    typedef enum CAM_DNDATA_TYPE
+    {
+        CAM_DN_PHOTO=1,         //飞控给的拍照指令
+        CAM_DN_HEADINFO=2,      //飞控给的航向信息
+        CAM_DN_REMOTECONTROL=3, //飞控给的遥控信息
+        CAM_DN_CHANGEZOOM=4,    //变焦指令
+        CAM_DN_RECODER=5,       //录像指令
+        CAM_DN_PITCH=6,         //俯仰控制指令
+        CAM_DN_HEAD=7,          //航向控制指令
+        CAM_DN_MODE=8,          //云台模式控制指令
+        CAM_DN_CAMMODE=9,       //相机模式控制指令（录像/拍照模式）
+        CAM_DN_FLOW=10,         //打开相机追尾功能
+        CAM_DN_POSCONTROL=11,   //发送坐标
+        CAM_DN_READPID=12,      //读取云台的PID参数
+        CAM_DN_CHANGEPID=13,    //修改云台PID参数
+        CAM_DN_PITCHANGLE=14,   //俯仰角度控制
+        CAM_DN_TRANS=15,        //透传指令
+        CAM_DN_ZOOMVALUE=16,    //指定变焦倍数
+        CAM_DN_FOCUS=17,        //对焦
+        CAM_DN_HEADANGLE=18,    //航向角度控
+        CAM_DN_SENDTIME=19,     //发送时间 0x13
+        CAM_DN_HANDCONTROL=20,  //手势移动（像素）
+    } CAM_DNDATA_TYPE;
+
+    CameraMount(Vehicle* vehicle);
+    Q_PROPERTY(float    pitchAngle  READ pitchAngle     NOTIFY pitchAngleChanged) //俯仰角度
+    Q_PROPERTY(float    rollAngle   READ rollAngle      NOTIFY rollAngleChanged) //横滚角度
+    Q_PROPERTY(float    headAngle   READ headAngle      NOTIFY headAngleChanged) //偏航角度
+    Q_PROPERTY(int      cam_type    READ cam_type       NOTIFY cam_typeChanged) //云台类型
+    Q_PROPERTY(int      errorCode   READ errorCode      NOTIFY errorCodeChanged)//错误代码
+    Q_PROPERTY(bool     hasError    READ hasError       NOTIFY hasErrorChanged)
+    Q_PROPERTY(int      tackPictIndex   READ tackPictIndex      NOTIFY tackPictIndexChanged) //拍照反馈
+    Q_PROPERTY(int      mode        READ mode           NOTIFY modeChanged)     //云台模式  0:锁航向  1:自由控 2：一键回中
+    Q_PROPERTY(QString  backCode    READ backCode       NOTIFY backCodeChanged) //透传指令
+    Q_PROPERTY(int      zoom        READ zoom           NOTIFY zoomChanged) //变焦倍数
+    //云台在线PID调试
+    Q_PROPERTY(QVariantList dataPIDList       READ dataPIDList           NOTIFY dataPIDListChanged)
+    Q_PROPERTY(QVariantList dataPIDListM2     READ dataPIDListM2         NOTIFY dataPIDListM2Changed)
+    Q_PROPERTY(QVariantList dataPIDListM3     READ dataPIDListM3         NOTIFY dataPIDListM3Changed)
+    Q_PROPERTY(bool         writeROMState     READ writeROMState         NOTIFY writeROMStateChanged)
+    Q_PROPERTY(bool         writeFlashState   READ writeFlashState       NOTIFY writeFlashStateChanged)
+
+    /* 无以下功能时 -- 屏蔽即可 */
+    Q_PROPERTY(int      videoStatus READ videoStatus    NOTIFY videoStatusChanged) //录像状态   1：录像中 2：停止录像
+    Q_PROPERTY(int      zoomState   READ zoomState      NOTIFY zoomStateChanged) //0倍数变小  1停止变焦   2倍数变大
+
+    /* ui上用 */
+    Q_PROPERTY(int          zoomUseState    READ zoomUseState       NOTIFY zoomUseStateChanged) //使用状态 0倍数变小  1停止变焦   2倍数变大
+    Q_PROPERTY(int          videoUseClick   READ videoUseClick      NOTIFY videoUseClickChanged)  //使用状态 录像触发状态  1：弹起    2：按下  按下后100ms
+
+    int     cam_type        (void){return _cam_type;}
+    float   pitchAngle      (void){return _pitchAngle;}
+    float   rollAngle       (void){return _rollAngle;}
+    float   headAngle       (void){return _headAngle;}
+    int     mode            (void){return _mode;}
+    int     errorCode       (void){return _errorCode;}
+    bool    hasError        (void){return _hasError;}
+    int     tackPictIndex   (void){return _tackPictIndex;}
+    QString backCode        (void){return _backCode;}
+    int     zoom            (void){return _zoom;}
+    /* 无以下功能时 -- 屏蔽即可 */
+    int     videoStatus     (void){return _videoStatus;}
+    int     zoomState       (void){return _zoomState;}
+
+    int     zoomUseState    (void){return _zoomUseState;}
+    int     videoUseClick   (void){return _videoUseClick;}
+
+    QVariantList dataPIDList(void){ return _dataPIDList;}
+    QVariantList dataPIDListM2(void){ return _dataPIDListM2;}
+    QVariantList dataPIDListM3(void){ return _dataPIDListM3;}
+    bool writeROMState      (void){ return _writeROMState;}
+    bool writeFlashState    (void){ return _writeFlashState;}
+
+    //控制俯仰
+    //offset 偏移量  plus偏移方向 true:正方向 false:负方向
+    Q_INVOKABLE void    controlPitch    (int offset = 5, bool plus=true);
+    Q_INVOKABLE void    controlPitchAngle(int angle);//角度控制
+    //控制偏航
+    //offset 偏移量 plus偏移方向 true：正方向 false:负方向
+    Q_INVOKABLE void    controlHead     (int offset = 5, bool plus=true);
+    Q_INVOKABLE void    controlHeadAngle(int angle);//角度控制
+    //控制云台模式
+    Q_INVOKABLE void    controlMode     (int mode);
+
+    //控制指令
+    Q_INVOKABLE void    videoTape       (void); //录像
+     //控制变焦
+    // plus 标志是否是正的偏移 默认为true
+    Q_INVOKABLE void    controlZoom     (int zoom); // 0缩小  1停止   2放大
+    Q_INVOKABLE void    controlFlow    (bool open);  //跟踪  -- 并不是所有云台都有此功能
+    //发送坐标点到云台 x,y 坐标点   type坐标类型：1：指点移动  2：指点测温    3：指点跟踪
+    Q_INVOKABLE void    controlPos     (int x, int y, int type=1);
+    //发送矩形到云台 x,y 坐标点  width,height 矩形的宽高   type坐标类型：3：指点跟踪
+    Q_INVOKABLE void    controlPos     (int x, int y, int width, int height, int type = 3);
+//    Q_INVOKABLE void    controlCommand(QString code){ MountInfo::controlCommand(code, writeId()); } //重写 -- 透传
+    //读取写入云台PID参数
+    Q_INVOKABLE void    readPIDdata(int state);//0:PID写入flash  1:读取PID参数
+    //修改云台PID参数
+    Q_INVOKABLE void    writePIDdata(int type,int value);
+
+    int     mountType(void) const final { return MOUNT_CAM_INFO; }
+    void    handleInfo(const can_data& data);//云台类
+    int     readId(void)const final  { return _cam_type; } //云台类
+    void    setCam_type     (int type);
+
+signals:
+    void pitchAngleChanged();
+    void rollAngleChanged();
+    void headAngleChanged();
+    void cam_typeChanged();
+    void modeChanged();
+    void errorCodeChanged();
+    void hasErrorChanged();
+    void tackPictIndexChanged();
+    void backCodeChanged();
+    void dataPIDListChanged();
+    void dataPIDListM2Changed();
+    void dataPIDListM3Changed();
+    void writeROMStateChanged();
+    void writeFlashStateChanged();
+
+    void zoomChanged();
+    void videoStatusChanged(int state);
+
+    void zoomUseStateChanged();
+    void videoUseClickChanged();
+    void zoomStateChanged();
+
+private slots:
+    void    oninitVideoUseClick();
+private:
+    void  setZoomUseState (int zoomUseState);
+    void  setVideoUseClick(int videoUseClick);
+
+    void    setPitchAngle   (float angle);
+    void    setRollAngle    (float angle);
+    void    setHeadAngle    (float angle);
+    void    setMode         (int mode);
+    void    setErrorCode    (int err);
+    void    setHasError     (bool isError);
+    void    setTackPictIndex(int index);
+    void    setBackCode     (QString code);
+    void    setZoomState    (int zoomState);
+    void    setZoom         (int zoom);
+    void    setVideoStatus  (int status);
+//    void    sendTime();
+
+    //云台PID参数反馈
+    void parsePID(const uint8_t* ptr, int length);
+    //修改PID参数反馈
+    void parsePIDWriteRamState(const uint8_t* ptr, int length);
+    //写入PID参数反馈
+    void parsePIDWriteFlashState(const uint8_t* ptr, int length);
+    //云台角度反馈
+    void parseCameAngle(const uint8_t* ptr, int length);
+    //处理云台错误信息
+    void parseCamError(const uint8_t* ptr, int length);
+    //拍照信息反馈
+    void tackPickIndex(const uint8_t* ptr, int length);
+    // 解析反馈透传指令
+    void parseBackCode(const uint8_t* ptr, int length);
+    // 处理相机反馈信息
+    void parseCamInfo(const uint8_t* ptr, int length);
+    //变焦状态反馈
+    void parseZoomState(const uint8_t* ptr, int length);
+
+    /* 子类有该功能 需重写实现*/
+    // 解析反馈温度信息
+    virtual void parseTemCode(const uint8_t* ptr, int length) { }
+
+protected:
+    virtual void parseCamParameter(const Camera_Parameter& cameradata);  //这个函数子类更具需要覆写
+
+private:
+    int        _cam_type;
+    float      _pitchAngle;
+    float      _rollAngle;
+    float      _headAngle;
+    int        _tackPictIndex;
+    int        _errorCode;
+    int        _mode;
+    bool       _hasError;
+    QString    _backCode;
+
+    int        _zoom;
+    int        _videoStatus;
+    int        _zoomState;
+
+    /* 按键使用状态  */
+    int        _zoomUseState = 1;
+    int        _videoUseClick = 1;
+
+    /* 调参用 */
+    QVariantList    _dataPIDList;
+    QVariantList    _dataPIDListM2;
+    QVariantList    _dataPIDListM3;
+    bool  _writeROMState;
+    bool  _writeFlashState;
+
+    //将XX数据写入ram
+//    Q_INVOKABLE void    writeXXDataInRam     (int mode);
+};
+
+#endif // CAMERAMOUNT_H

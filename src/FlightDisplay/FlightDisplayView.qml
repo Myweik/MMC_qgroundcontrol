@@ -288,7 +288,7 @@ QGCView {
           if (_flightVideo.state ==  "popup") {
             _flightVideo.state = "popup-finished"
           }
-          QGroundControl.videoManager.startVideo()
+//          QGroundControl.videoManager.startVideo()
       }
     }
 
@@ -346,7 +346,7 @@ QGCView {
             height:         !_mainIsMap ? _panel.height : _pipSize * (9/16)
             anchors.left:   _panel.left
             anchors.bottom: _panel.bottom
-            visible:        QGroundControl.videoManager.hasVideo && (!_mainIsMap || _isPipVisible)
+            visible:        /*QGroundControl.videoManager.hasVideo && */(!_mainIsMap || _isPipVisible)
 
             onParentChanged: {
                 /* If video comes back from popup
@@ -390,7 +390,7 @@ QGCView {
                         script: {
                             // Stop video, restart it again with Timer
                             // Avoiding crashs if ParentChange is not yet done
-                            QGroundControl.videoManager.stopVideo()
+//                            QGroundControl.videoManager.stopVideo()
                             videoPopUpTimer.running = true
                         }
                     }
@@ -414,7 +414,7 @@ QGCView {
                     name: "unpopup"
                     StateChangeScript {
                         script: {
-                            QGroundControl.videoManager.stopVideo()
+//                            QGroundControl.videoManager.stopVideo()
                             videoPopUpTimer.running = true
                         }
                     }
@@ -428,19 +428,25 @@ QGCView {
                     }
                 }
             ]
-            //-- Video Streaming
-            FlightDisplayViewVideo {
-                id:             videoStreaming
-                anchors.fill:   parent
-                visible:        QGroundControl.videoManager.isGStreamer
-            }
-            //-- UVC Video (USB Camera or Video Device)
+
             Loader {
-                id:             cameraLoader
                 anchors.fill:   parent
-                visible:        !QGroundControl.videoManager.isGStreamer
-                source:         QGroundControl.videoManager.uvcEnabled ? "qrc:/qml/FlightDisplayViewUVC.qml" : "qrc:/qml/FlightDisplayViewDummy.qml"
+                visible:        true // !QGroundControl.videoManager.isGStreamer
+                source:         "qrc:/ffmpeg/VLCView.qml"
             }
+//            //-- Video Streaming
+//            FlightDisplayViewVideo {
+//                id:             videoStreaming
+//                anchors.fill:   parent
+//                visible:        QGroundControl.videoManager.isGStreamer
+//            }
+//            //-- UVC Video (USB Camera or Video Device)
+//            Loader {
+//                id:             cameraLoader
+//                anchors.fill:   parent
+//                visible:        !QGroundControl.videoManager.isGStreamer
+//                source:         QGroundControl.videoManager.uvcEnabled ? "qrc:/qml/FlightDisplayViewUVC.qml" : "qrc:/qml/FlightDisplayViewDummy.qml"
+//            }
         }
 
         QGCPipable {
@@ -451,7 +457,7 @@ QGCView {
             anchors.left:       _panel.left
             anchors.bottom:     _panel.bottom
             anchors.margins:    ScreenTools.defaultFontPixelHeight
-            visible:            QGroundControl.videoManager.hasVideo && !QGroundControl.videoManager.fullScreen && _flightVideo.state != "popup"
+            visible:           /* QGroundControl.videoManager.hasVideo && */!QGroundControl.videoManager.fullScreen && _flightVideo.state != "popup"
             isHidden:           !_isPipVisible
             isDark:             isBackgroundDark
             enablePopup:        _mainIsMap

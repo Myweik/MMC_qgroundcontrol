@@ -38,6 +38,7 @@
 #if defined(QGC_GST_TAISYNC_ENABLED)
 #include "TaisyncManager.h"
 #endif
+#include "MMC/mmcplugin.h"
 
 #if defined(QGC_CUSTOM_BUILD)
 #include CUSTOMHEADER
@@ -78,6 +79,7 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
 #if defined(QGC_GST_TAISYNC_ENABLED)
     _taisyncManager         = new TaisyncManager            (app, this);
 #endif
+    _transceiverManager     = new TransceiverManager        (app, this);
 }
 
 void QGCToolbox::setChildToolboxes(void)
@@ -107,6 +109,7 @@ void QGCToolbox::setChildToolboxes(void)
 #if defined(QGC_GST_TAISYNC_ENABLED)
     _taisyncManager->setToolbox(this);
 #endif
+    _transceiverManager->setToolbox(this);
 }
 
 void QGCToolbox::_scanAndLoadPlugins(QGCApplication* app)

@@ -68,6 +68,7 @@ public:
     Q_PROPERTY(bool                 airmapSupported     READ airmapSupported        CONSTANT)
     Q_PROPERTY(TaisyncManager*      taisyncManager      READ taisyncManager         CONSTANT)
     Q_PROPERTY(bool                 taisyncSupported    READ taisyncSupported       CONSTANT)
+    Q_PROPERTY(TransceiverManager*  transceiverManager  READ transceiverManager     CONSTANT)
 
     Q_PROPERTY(int      supportedFirmwareCount          READ supportedFirmwareCount CONSTANT)
 
@@ -168,6 +169,7 @@ public:
 #else
     bool                    taisyncSupported    () { return false; }
 #endif
+    TransceiverManager*     transceiverManager  () { return _transceiverManager; }
 
     qreal zOrderTopMost             () { return 1000; }
     qreal zOrderWidgets             () { return 100; }
@@ -227,6 +229,7 @@ private:
     FactGroup*              _gpsRtkFactGroup        = nullptr;
     AirspaceManager*        _airspaceManager        = nullptr;
     TaisyncManager*         _taisyncManager         = nullptr;
+    TransceiverManager*     _transceiverManager     = nullptr;
 
     bool                    _skipSetupPage          = false;
 

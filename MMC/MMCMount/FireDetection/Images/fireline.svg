@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X7 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="19.8812mm" height="11.162mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 80 45"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil0 {fill:#4BC1F0}
+   ]]>
+  </style>
+ </defs>
+ <g id="图层_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <path class="fil0" d="M17 8c3,1 7,2 10,4 3,2 2,6 -4,9 -5,3 -18,7 -18,11 -1,4 2,7 14,7 12,0 23,0 23,0l7 6c0,0 -28,0 -35,-1 -7,-1 -14,-4 -14,-11 0,-6 12,-10 12,-10 3,-2 21,-6 12,-11 -6,-3 -9,-4 -10,-4 -4,-1 -1,-1 3,0z"/>
+  <g id="_3104198182736">
+   <rect class="fil0" transform="matrix(0.161392 0.0931798 -0.0931798 0.161392 68.7365 -0.000159137)" width="10.6326" height="182.87"/>
+   <rect class="fil0" transform="matrix(0.161392 0.0931798 -0.0931798 0.161392 78.174 5.44864)" width="10.6326" height="182.87"/>
+   <rect class="fil0" transform="matrix(0.161392 0.0931798 -0.0931798 0.161392 73.3717 2.67597)" width="10.6326" height="182.87"/>
+   <rect class="fil0" transform="matrix(0.161392 0.0931798 -0.0931798 0.161392 68.7365 -0.000159137)" width="69.1087" height="10.1006"/>
+   <polygon class="fil0" points="51,30 51,35 58,40 62,37 "/>
+   <polygon class="fil0" points="50,45 51,41 51,36 54,38 57,40 54,43 "/>
+  </g>
+ </g>
+</svg>

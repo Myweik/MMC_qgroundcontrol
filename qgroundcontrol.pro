@@ -1281,3 +1281,10 @@ contains (CONFIG, QGC_DISABLE_BUILD_SETUP) {
 #
 
 include(QGCInstaller.pri)
+
+
+#
+# MMC
+#
+
+include(MMC/MMC.pri)

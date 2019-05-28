@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>拍照</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-8.2%" y="-2.1%" width="116.4%" height="104.7%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-Copy-3" transform="translate(-755.000000, -345.000000)">
+            <g id="挂载-copy-9" filter="url(#filter-1)" transform="translate(735.000000, 90.000000)">
+                <g id="Group-3" transform="translate(20.000000, 255.000000)">
+                    <g id="拍照-copy" transform="translate(2.000000, 2.000000)">
+                        <rect id="Rectangle-3" fill="#D8D8D8" fill-rule="nonzero" opacity="0" x="0" y="0" width="28" height="28"></rect>
+                        <path d="M15.7534618,12.0141005 C13.8699452,12.0141005 12.3429533,13.5719685 12.3429533,15.4937626 C12.3429533,17.4155567 13.8700482,18.9470162 15.7534618,18.9470162 C17.6369783,18.9470162 19.1274736,17.4155567 19.1274736,15.4937626 C19.1274736,13.5719685 17.6369783,12.0141005 15.7534618,12.0141005 Z M22.6669559,8.19684254 L19.8909696,8.19684254 C19.1520021,7.23692406 18.2934037,6.125 18.2814355,6.125 L12.2269258,6.125 C12.2127698,6.125 11.3449057,7.23692406 10.5983969,8.19684254 L5.33304409,8.19684254 C4.32050594,8.19684254 3.5,9.02873709 3.5,10.0553293 L3.5,20.8916437 C3.5,21.9182098 4.32050594,22.75 5.33304409,22.75 L22.6669559,22.75 C23.6794941,22.75 24.5,21.9182098 24.5,20.8916437 L24.5,10.0553293 C24.5,9.02873709 23.6794941,8.19684254 22.6669559,8.19684254 Z M8.10802662,12.9032744 C7.53154392,12.9032744 7.0645255,12.4297999 7.0645255,11.8458114 C7.0645255,11.2613272 7.53154392,10.7878265 8.10802662,10.7878265 C8.6840203,10.7878265 9.15103872,11.2613272 9.15103872,11.8458114 C9.15103872,12.4297999 8.6840203,12.9032744 8.10802662,12.9032744 Z M15.8109608,20.139862 C13.2759606,20.139862 11.1450233,18.0431506 11.1450233,15.4572813 C11.1450233,12.870864 13.2759606,10.7746745 15.8109608,10.7746745 C18.3454719,10.7746745 20.3749752,12.870864 20.3749752,15.4572813 C20.3749752,18.0431506 18.3454719,20.139862 15.8109608,20.139862 Z" id="拍照" fill="#677B8E" fill-rule="evenodd"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
