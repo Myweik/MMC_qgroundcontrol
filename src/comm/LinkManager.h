@@ -226,6 +226,8 @@ private:
     QStringList _commPortList;
     QStringList _commPortDisplayList;
 
+    QSerialPort* _serial;
+
 #ifndef NO_SERIAL_LINK
     QTimer              _activeLinkCheckTimer;                  ///< Timer which checks for a vehicle showing up on a usb direct link
     QList<SerialLink*>  _activeLinkCheckList;                   ///< List of links we are waiting for a vehicle to show up on

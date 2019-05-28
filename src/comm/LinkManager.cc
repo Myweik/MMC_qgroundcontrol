@@ -87,8 +87,16 @@ void LinkManager::setToolbox(QGCToolbox *toolbox)
     connect(_mavlinkProtocol, &MAVLinkProtocol::messageReceived, this, &LinkManager::_mavlinkMessageReceived);
 
     connect(&_portListTimer, &QTimer::timeout, this, &LinkManager::_updateAutoConnectLinks);
-    _portListTimer.start(_autoconnectUpdateTimerMSecs); // timeout must be long enough to get past bootloader on second pass
+//    _portListTimer.start(_autoconnectUpdateTimerMSecs); // timeout must be long enough to get past bootloader on second pass
 
+    SerialConfiguration* pSerialConfig = new SerialConfiguration("ttysWK2");
+    if (pSerialConfig) {
+        pSerialConfig->setBaud(115200);
+        pSerialConfig->setDynamic(true);
+        pSerialConfig->setPortName("ttysWK2");
+        _sharedAutoconnectConfigurations.append(SharedLinkConfigurationPointer(pSerialConfig));
+        createConnectedLink(_sharedAutoconnectConfigurations.last(), false);
+    }
 }
 
 // This should only be used by Qml code
@@ -202,7 +210,7 @@ void LinkManager::_addLink(LinkInterface* link)
     connect(link, &LinkInterface::bytesReceived,        _mavlinkProtocol,   &MAVLinkProtocol::receiveBytes);
 
     _mavlinkProtocol->resetMetadataForLink(link);
-    _mavlinkProtocol->setVersion(_mavlinkProtocol->getCurrentVersion());
+//    _mavlinkProtocol->setVersion(_mavlinkProtocol->getCurrentVersion());
 
     connect(link, &LinkInterface::connected,            this, &LinkManager::_linkConnected);
     connect(link, &LinkInterface::disconnected,         this, &LinkManager::_linkDisconnected);
@@ -975,7 +983,7 @@ void LinkManager::_removeConfiguration(LinkConfiguration* config)
 QList<LinkInterface*> LinkManager::links(void)
 {
     QList<LinkInterface*> rawLinks;
-    for (int i=0; i<_sharedLinks.count(); i++) {
+    for (int i=1; i<_sharedLinks.count(); i++) {
         rawLinks.append(_sharedLinks[i].data());
     }
     return rawLinks;

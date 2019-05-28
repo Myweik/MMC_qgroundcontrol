@@ -78,24 +78,24 @@ int WindowsCrtReportHook(int reportType, char* message, int* returnValue)
 
 #endif
 
-#if defined(__android__) && !defined(NO_SERIAL_LINK)
-#include <jni.h>
-#include "qserialport.h"
+//#if defined(__android__) && !defined(NO_SERIAL_LINK)
+//#include <jni.h>
+//#include "qserialport.h"
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved)
-{
-    Q_UNUSED(reserved);
+//jint JNI_OnLoad(JavaVM* vm, void* reserved)
+//{
+//    Q_UNUSED(reserved);
 
-    JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
-        return -1;
-    }
+//    JNIEnv* env;
+//    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+//        return -1;
+//    }
 
-    QSerialPort::setNativeMethods();
+//    QSerialPort::setNativeMethods();
 
-    return JNI_VERSION_1_6;
-}
-#endif
+//    return JNI_VERSION_1_6;
+//}
+//#endif
 
 #ifdef __android__
 #include <QtAndroid>
