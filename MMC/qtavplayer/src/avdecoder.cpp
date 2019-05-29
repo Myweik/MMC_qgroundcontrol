@@ -123,7 +123,8 @@ AVDecoder::AVDecoder(QObject *parent) : QObject(parent), videoq(new PacketQueue)
 
     _usbfifo = new usbfifo();
 //    _usbfifo->initialfifo();
-    _hidUSB = new UsbExample(this);
+    _hidUSB = getUsbExample();
+
 
     videoq->release();
     renderq->release();

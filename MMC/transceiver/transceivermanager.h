@@ -26,18 +26,21 @@ public:
     explicit TransceiverManager(QGCApplication *app, QGCToolbox *toolbox);
     ~TransceiverManager();
 
-    Q_PROPERTY(RadioMemberBase*             radioMember                READ radioMember               NOTIFY radioMemberChanged)
+    Q_PROPERTY(RadioMemberBase*             radioMember                READ radioMember                 NOTIFY radioMemberChanged)
+    Q_PROPERTY(FpvMember*                   fpvMember                  READ fpvMember                   NOTIFY fpvMemberChanged)
 
     /* 数传部分 */
     void disconnectRadio  (void);
     void connectRadio (const QString& device);
 
     RadioMemberBase* radioMember() { return _radioMember; }
+    FpvMember* fpvMember() { return _fpvMember; }
 
     // Override from QGCTool
     virtual void setToolbox(QGCToolbox *toolbox);
 signals:
     void radioMemberChanged();
+    void fpvMemberChanged();
 
 private slots:
     void onStartTimer();
@@ -45,6 +48,7 @@ private slots:
 
 private:
     void setRadioMember(RadioMemberBase* radioMember);
+    void setFpvMember(FpvMember* fpvMember);
     void cleanup();
 
     RadioProvider*   _radioProvider = nullptr;

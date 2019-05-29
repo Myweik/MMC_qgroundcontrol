@@ -10,7 +10,6 @@ TransceiverManager::TransceiverManager(QGCApplication *app, QGCToolbox *toolbox)
 #elif defined(Q_OS_LINUX) || defined(Q_OS_WIN32)
     _radioMember = new RadioMember(this);
 #endif
-    setRadioMember(_radioMember);
 
 #if defined(Q_OS_ANDROID)
     QTimer::singleShot(1, this, SLOT(onStartTimer()));
@@ -76,6 +75,15 @@ void TransceiverManager::setRadioMember(RadioMemberBase *radioMember)
         if (_radioMember) { delete(_radioMember); }
         _radioMember = radioMember;
         emit radioMemberChanged();
+    }
+}
+
+void TransceiverManager::setFpvMember(FpvMember *fpvMember)
+{
+    if (fpvMember && fpvMember != _fpvMember) {
+        if (_fpvMember) { delete(_fpvMember); }
+        _fpvMember = fpvMember;
+        emit fpvMemberChanged();
     }
 }
 

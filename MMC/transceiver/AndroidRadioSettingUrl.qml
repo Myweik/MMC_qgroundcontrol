@@ -44,6 +44,7 @@ import QGroundControl.SettingsManager       1.0
     readonly property real _internalWidthRatio:          0.8
 
     property var radioMember: QGroundControl.transceiverManager.radioMember
+    property var fpvMember: QGroundControl.transceiverManager.fpvMember
 
     QGCPalette { id: qgcPal }
 
@@ -124,6 +125,7 @@ import QGroundControl.SettingsManager       1.0
         }
     }
 
+
     Item {
         id:             panel
         anchors.fill:   parent
@@ -133,355 +135,410 @@ import QGroundControl.SettingsManager       1.0
             contentHeight:      settingsColumn.height
             contentWidth:       settingsColumn.width
 
-            Column {
-                id:                 settingsColumn
-                width:              _qgcView.width
-                spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-                anchors.margins:    ScreenTools.defaultFontPixelWidth
-                //-----------------------------------------------------------------
-                //-- General
-                Item {
-                    width:                      _panelWidth
-                    height:                     generalLabel.height
-                    anchors.margins:            ScreenTools.defaultFontPixelWidth
-                    anchors.horizontalCenter:   parent.horizontalCenter
-                    QGCLabel {
-                        id:             generalLabel
-                        text:           qsTr("General")
-                        font.family:    ScreenTools.demiboldFontFamily
+            Column{
+
+                Column {
+                    id:                 settingsColumn
+                    width:              _qgcView.width
+                    spacing:            ScreenTools.defaultFontPixelHeight * 0.5
+                    anchors.margins:    ScreenTools.defaultFontPixelWidth
+                    //-----------------------------------------------------------------
+                    //-- General
+                    Item {
+                        width:                      _panelWidth
+                        height:                     generalLabel.height
+                        anchors.margins:            ScreenTools.defaultFontPixelWidth
+                        anchors.horizontalCenter:   parent.horizontalCenter
+                        QGCLabel {
+                            id:             generalLabel
+                            text:           qsTr("General")
+                            font.family:    ScreenTools.demiboldFontFamily
+                        }
                     }
-                }
-                Rectangle {
-                    height:                     generalRow.height + (ScreenTools.defaultFontPixelHeight * 2)
-                    width:                      _panelWidth
-                    color:                      qgcPal.windowShade
-                    anchors.margins:            ScreenTools.defaultFontPixelWidth
-                    anchors.horizontalCenter:   parent.horizontalCenter
+                    Rectangle {
+                        height:                     generalRow.height + (ScreenTools.defaultFontPixelHeight * 2)
+                        width:                      _panelWidth
+                        color:                      qgcPal.windowShade
+                        anchors.margins:            ScreenTools.defaultFontPixelWidth
+                        anchors.horizontalCenter:   parent.horizontalCenter
 
-                    Row {
-                        id:                 generalRow
-                        spacing:            ScreenTools.defaultFontPixelWidth * 4
-                        anchors.centerIn:   parent
-
-
-
-                        Column {
-                            spacing:    10
-
-                            /* 充电状态，0为不充电，1为充电中 */
-                            /* 电池电量剩余时间 */
-                            /* 电池健康状态 */
-                            /* 电池温度 */
-                            /* 遥控器开关-是否发送数据给飞控 */
-                            /* 遥控器模式，左手模式或者右手模式 */
-                            /* 遥控器校准状态 */
-                            /* 版本号 */
-                            QGCLabel { text: radioMember.chargeStateComment + ": " +  radioMember.chargeState }
-                            QGCLabel { text: "voltage: " + radioMember.voltage }
-                            QGCLabel { text: "energy: " + radioMember.energy }
-                            QGCLabel { text: radioMember.timeComment + ": " +  radioMember.time }
-                            QGCLabel { text: radioMember.stateOfHealthComment + ": " +  radioMember.stateOfHealth }
-                            QGCLabel { text: radioMember.temperatureComment + ": " +  radioMember.temperature }
-                            //                                QGCLabel { text: radioMember.rockerStateComment + ": " +  radioMember.rockerState }
-                            QGCLabel { text: radioMember.rcModeComment + ": " +  radioMember.rcMode }
-                            QGCLabel { text: radioMember.calirationStateComment + ": " +  radioMember.calirationState }
-
-                            QGCLabel { text: radioMember.verComment + ": " +  radioMember.ver }
-
-                            Row{
-                                visible:            true
-                                spacing:  20
-                                QGCRadioButton {
-                                    text:               qsTr("Left Model", "左手模式")
-                                    checked:            radioMember.rcMode === 0x05
-                                    onClicked: {
-                                        console.log("--------------------Left Model")
-                                        if(checked)
-                                            radioMember.setCalirationState(true)
-                                    }
-                                }
-
-                                QGCRadioButton {
-                                    text:               qsTr("Right Model", "右手模式")
-                                    checked:            radioMember.rcMode === 0x0A
-                                    onClicked: {
-                                        console.log("--------------------Right Model")
-                                        if(checked)
-                                            radioMember.setCalirationState(false)
-                                    }
-                                }
-                            }
+                        Row {
+                            id:                 generalRow
+                            spacing:            ScreenTools.defaultFontPixelWidth * 4
+                            anchors.centerIn:   parent
 
                             Column {
+                                spacing:    10
+
+                                /* 充电状态，0为不充电，1为充电中 */
+                                /* 电池电量剩余时间 */
+                                /* 电池健康状态 */
+                                /* 电池温度 */
+                                /* 遥控器开关-是否发送数据给飞控 */
+                                /* 遥控器模式，左手模式或者右手模式 */
+                                /* 遥控器校准状态 */
+                                /* 版本号 */
+                                QGCLabel { text: radioMember.chargeStateComment + ": " +  radioMember.chargeState }
+                                QGCLabel { text: "voltage: " + radioMember.voltage }
+                                QGCLabel { text: "energy: " + radioMember.energy }
+                                QGCLabel { text: radioMember.timeComment + ": " +  radioMember.time }
+                                QGCLabel { text: radioMember.stateOfHealthComment + ": " +  radioMember.stateOfHealth }
+                                QGCLabel { text: radioMember.temperatureComment + ": " +  radioMember.temperature }
+                                //                                QGCLabel { text: radioMember.rockerStateComment + ": " +  radioMember.rockerState }
+                                QGCLabel { text: radioMember.rcModeComment + ": " +  radioMember.rcMode }
+                                QGCLabel { text: radioMember.calirationStateComment + ": " +  radioMember.calirationState }
+
+                                QGCLabel { text: radioMember.verComment + ": " +  radioMember.ver }
+
                                 Row{
-                                    spacing:  10
-                                    QGCButton {
+                                    visible:            true
+                                    spacing:  20
+                                    QGCRadioButton {
+                                        text:               qsTr("Left Model", "左手模式")
+                                        checked:            radioMember.rcMode === 0x05
+                                        onClicked: {
+                                            console.log("--------------------Left Model")
+                                            if(checked)
+                                                radioMember.setCalirationState(true)
+                                        }
+                                    }
+
+                                    QGCRadioButton {
+                                        text:               qsTr("Right Model", "右手模式")
+                                        checked:            radioMember.rcMode === 0x0A
+                                        onClicked: {
+                                            console.log("--------------------Right Model")
+                                            if(checked)
+                                                radioMember.setCalirationState(false)
+                                        }
+                                    }
+                                }
+
+                                Column {
+                                    Row{
+                                        spacing:  10
                                         visible: 6 <= radioMember.checkStatus || radioMember.checkStatus <= 1
-                                        text: qsTr("Calibration", "校准")
+                                        QGCButton {
+                                            text: qsTr("Calibration", "校准")
+                                            width: 70 * ScreenTools.widgetScale
+                                            enabled: true
+                                            onClicked: {
+                                                radioMember.sendCheckStatus()
+                                            }
+                                        }
+                                        QGCLabel {
+                                            text: radioMember.calirationState ? qsTr("(OK)", "(已校准)") : qsTr("(NG)", "(未校准)")
+                                            color : radioMember.calirationState ? "#0f0" : "#f00"
+                                        }
+                                    }
+
+                                    QGCButton {
+                                        visible: 1 < radioMember.checkStatus && radioMember.checkStatus <= 3
+                                        text: qsTr("Next", "下一步")
                                         width: 70 * ScreenTools.widgetScale
                                         enabled: true
                                         onClicked: {
                                             radioMember.sendCheckStatus()
                                         }
                                     }
+
+                                    QGCButton {
+                                        visible: 3 < radioMember.checkStatus && radioMember.checkStatus <= 5
+                                        text: qsTr("Next", "下一步")
+                                        width: 70 * ScreenTools.widgetScale
+                                        enabled: true
+                                        onClicked: {
+                                            radioMember.sendCheckStatus()
+                                        }
+                                    }
+                                    QGCLabel { visible: radioMember.checkStatus === 2;   text: qsTr("Keep the rocker relatively banned. When Mid remains unchanged, click Next", "请保持摇杆相对禁止，当Mid不变时，点击下一步")}
+                                    QGCLabel { visible: radioMember.checkStatus === 4;   text: qsTr("Turn the rocker to the maximum limit. When Min and Max remain unchanged, click Next.", "请最大限制的拨动摇杆，当Min、max不变时，点击下一步") }
+                                    QGCLabel { visible: radioMember.checkStatus === 255; text: qsTr("Calibration failed", "校准失败") }
+                                    QGCLabel { visible: radioMember.checkStatus === 6;   text: qsTr("Calibration completed", "校准完成") }
+                                }
+
+                                Column {
+                                    visible: 1 < radioMember.checkStatus && radioMember.checkStatus  < 6
+
                                     QGCLabel {
-                                        text: radioMember.calirationState ? qsTr("(OK)", "(已校准)") : qsTr("(NG)", "(未校准)")
-                                        color : radioMember.calirationState ? "#0f0" : "#f00"
+                                        horizontalAlignment:    Text.AlignHCenter
+                                        verticalAlignment:      Text.AlignVCenter
+                                        text:                   "Min[" + radioMember.channelBMin1 +", " + radioMember.channelBMin2 +", " + radioMember.channelBMin3 +", " + radioMember.channelBMin4 +", " + radioMember.channelBMin7 +", " + radioMember.channelBMin8 + " ]"
+                                    }
+
+                                    QGCLabel {
+                                        horizontalAlignment:    Text.AlignHCenter
+                                        verticalAlignment:      Text.AlignVCenter
+                                        text:                   "Mid[" + radioMember.channelBMid1 +", " + radioMember.channelBMid2 +", " + radioMember.channelBMid3 +", " + radioMember.channelBMid4 +", " + radioMember.channelBMid7 +", " + radioMember.channelBMid8 + " ]"
+                                    }
+
+                                    QGCLabel {
+                                        horizontalAlignment:    Text.AlignHCenter
+                                        verticalAlignment:      Text.AlignVCenter
+                                        text:                   "Max[" + radioMember.channelBMax1 +", " + radioMember.channelBMax2 +", " + radioMember.channelBMax3 +", " + radioMember.channelBMax4 +", " + radioMember.channelBMax7 +", " + radioMember.channelBMax8 + " ]"
+                                    }
+
+                                    QGCLabel {
+                                        horizontalAlignment:    Text.AlignHCenter
+                                        verticalAlignment:      Text.AlignVCenter
+                                        text:                   "Ver[" + radioMember.channelBVer1 +", " + radioMember.channelBVer2 +", " + radioMember.channelBVer3 +", " + radioMember.channelBVer4 +", " + radioMember.channelBVer7 +", " + radioMember.channelBVer8 + " ]"
                                     }
                                 }
 
-                                QGCButton {
-                                    visible: 1 < radioMember.checkStatus && radioMember.checkStatus <= 3
-                                    text: qsTr("Next", "下一步")
-                                    width: 70 * ScreenTools.widgetScale
-                                    enabled: true
-                                    onClicked: {
-                                        radioMember.sendCheckStatus()
-                                    }
-                                }
-
-                                QGCButton {
-                                    visible: 3 < radioMember.checkStatus && radioMember.checkStatus <= 5
-                                    text: qsTr("Next", "下一步")
-                                    width: 70 * ScreenTools.widgetScale
-                                    enabled: true
-                                    onClicked: {
-                                        radioMember.sendCheckStatus()
-                                    }
-                                }
-                                QGCLabel { visible: radioMember.checkStatus === 2;   text: qsTr("Keep the rocker relatively banned. When Mid remains unchanged, click Next", "请保持摇杆相对禁止，当Mid不变时，点击下一步")}
-                                QGCLabel { visible: radioMember.checkStatus === 4;   text: qsTr("Turn the rocker to the maximum limit. When Min and Max remain unchanged, click Next.", "请最大限制的拨动摇杆，当Min、max不变时，点击下一步") }
-                                QGCLabel { visible: radioMember.checkStatus === 255; text: qsTr("Calibration failed", "校准失败") }
-                                QGCLabel { visible: radioMember.checkStatus === 6;   text: qsTr("Calibration completed", "校准完成") }
                             }
 
                             Column {
-                                visible: 1 < radioMember.checkStatus && radioMember.checkStatus  < 6
-
-                                QGCLabel {
-                                    horizontalAlignment:    Text.AlignHCenter
-                                    verticalAlignment:      Text.AlignVCenter
-                                    text:                   "Min[" + radioMember.channelBMin1 +", " + radioMember.channelBMin2 +", " + radioMember.channelBMin3 +", " + radioMember.channelBMin4 +", " + radioMember.channelBMin7 +", " + radioMember.channelBMin8 + " ]"
+                                spacing:    10
+                                QGCLabel { text: qsTr("Channel Monitor") }
+                                Loader {
+                                    property int channel : radioMember.channel1
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel1Comment
+                                        item.channel = channel
+                                    }
                                 }
 
-                                QGCLabel {
-                                    horizontalAlignment:    Text.AlignHCenter
-                                    verticalAlignment:      Text.AlignVCenter
-                                    text:                   "Mid[" + radioMember.channelBMid1 +", " + radioMember.channelBMid2 +", " + radioMember.channelBMid3 +", " + radioMember.channelBMid4 +", " + radioMember.channelBMid7 +", " + radioMember.channelBMid8 + " ]"
+                                Loader {
+                                    property int channel : radioMember.channel2
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel2Comment
+                                        item.channel = channel
+                                    }
                                 }
 
-                                QGCLabel {
-                                    horizontalAlignment:    Text.AlignHCenter
-                                    verticalAlignment:      Text.AlignVCenter
-                                    text:                   "Max[" + radioMember.channelBMax1 +", " + radioMember.channelBMax2 +", " + radioMember.channelBMax3 +", " + radioMember.channelBMax4 +", " + radioMember.channelBMax7 +", " + radioMember.channelBMax8 + " ]"
+                                Loader {
+                                    property int channel : radioMember.channel3
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel3Comment
+                                        item.channel = channel
+                                    }
                                 }
 
-                                QGCLabel {
-                                    horizontalAlignment:    Text.AlignHCenter
-                                    verticalAlignment:      Text.AlignVCenter
-                                    text:                   "Ver[" + radioMember.channelBVer1 +", " + radioMember.channelBVer2 +", " + radioMember.channelBVer3 +", " + radioMember.channelBVer4 +", " + radioMember.channelBVer7 +", " + radioMember.channelBVer8 + " ]"
+                                Loader {
+                                    property int channel : radioMember.channel4
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel4Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                        }
-
-                        Column {
-                            spacing:    10
-                            QGCLabel { text: qsTr("Channel Monitor") }
-                            Loader {
-                                property int channel : radioMember.channel1
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel1Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel5
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel5Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel2
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel2Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel6
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel6Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel3
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel3Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel7
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel7Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel4
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel4Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel8
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel8Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel5
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel5Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel9
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel9Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel6
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel6Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel10
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel10Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel7
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel7Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel11
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel11Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel8
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel8Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel12
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel12Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel9
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel9Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel13
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel13Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel10
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel10Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel14
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel14Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
 
-                            Loader {
-                                property int channel : radioMember.channel11
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel11Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel15
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel15Comment
+                                        item.channel = channel
+                                    }
                                 }
-                            }
-
-                            Loader {
-                                property int channel : radioMember.channel12
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel12Comment
-                                    item.channel = channel
-                                }
-                            }
-
-                            Loader {
-                                property int channel : radioMember.channel13
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel13Comment
-                                    item.channel = channel
-                                }
-                            }
-
-                            Loader {
-                                property int channel : radioMember.channel14
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel14Comment
-                                    item.channel = channel
-                                }
-                            }
-
-                            Loader {
-                                property int channel : radioMember.channel15
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel15Comment
-                                    item.channel = channel
-                                }
-                            }
-                            Loader {
-                                property int channel : radioMember.channel16
-                                height:                 20
-                                width:                  500
-                                sourceComponent:        monitorColumn
-                                onChannelChanged: item.channel = channel
-                                Component.onCompleted: {
-                                    item.text = radioMember.channel16Comment
-                                    item.channel = channel
+                                Loader {
+                                    property int channel : radioMember.channel16
+                                    height:                 20
+                                    width:                  500
+                                    sourceComponent:        monitorColumn
+                                    onChannelChanged: item.channel = channel
+                                    Component.onCompleted: {
+                                        item.text = radioMember.channel16Comment
+                                        item.channel = channel
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
+
+                Column {
+                    width:              _qgcView.width
+                    spacing:            ScreenTools.defaultFontPixelHeight * 0.5
+                    anchors.margins:    ScreenTools.defaultFontPixelWidth
+                    //-----------------------------------------------------------------
+                    //-- General
+                    Item {
+                        width:                      _panelWidth
+                        height:                     generalLabel.height
+                        anchors.margins:            ScreenTools.defaultFontPixelWidth
+                        anchors.horizontalCenter:   parent.horizontalCenter
+                        QGCLabel {
+                            text:           qsTr("General2")
+                            font.family:    ScreenTools.demiboldFontFamily
+                        }
+                    }
+
+                    Rectangle {
+                        height:                     generalColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
+                        width:                      _panelWidth
+                        color:                      qgcPal.windowShade
+                        anchors.margins:            ScreenTools.defaultFontPixelWidth
+                        anchors.horizontalCenter:   parent.horizontalCenter
+
+
+                        Column {
+                            id:generalColumn
+                            spacing:            ScreenTools.defaultFontPixelWidth * 4
+                            anchors.centerIn:   parent
+
+                            Row{
+                                spacing:  10
+                                QGCButton {
+                                    text: qsTr("pair", "pair")
+                                    width: 70 * ScreenTools.widgetScale
+                                    enabled: !fpvMember.pairStatus
+                                    onClicked: {
+                                        fpvMember.setConfig()
+                                    }
+                                }
+                                QGCLabel {
+                                    text: !fpvMember.pairStatus ? qsTr("(OK)", "(OK)") : qsTr("(pairing)", "(pairing)")
+                                    color : !fpvMember.pairStatus ? "#0f0" : "#f00"
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+
             }
         }
+
     }
 }

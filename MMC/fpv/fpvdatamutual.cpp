@@ -41,6 +41,9 @@ int fpvDataMutual::writeData(char type, QByteArray buff)
 void fpvDataMutual::openSerial()
 {
    _openSerial(_device);
+
+   char buff[11] = {0xFF, 0x5A, 0x5B, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01};
+   writeData(1, QByteArray(buff, 11));
 }
 
 int fpvDataMutual::_openSerial(QString name)
@@ -76,5 +79,5 @@ int fpvDataMutual::_openSerial(QString name)
 
 int fpvDataMutual::_writeData(char type, QByteArray buff)
 {
-
+    return _serial->write(buff);
 }

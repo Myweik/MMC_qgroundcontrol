@@ -93,8 +93,6 @@ public:
 		usbfifo(void);
 	virtual ~usbfifo(void);
 public:
-//    QByteArray _readBuf;
-
     BuffQueue* _buffQurue = nullptr;
     QMutex _usbByteMutex;
 
