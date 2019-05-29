@@ -125,7 +125,6 @@ import QGroundControl.SettingsManager       1.0
         }
     }
 
-
     Item {
         id:             panel
         anchors.fill:   parent
@@ -284,7 +283,6 @@ import QGroundControl.SettingsManager       1.0
                                         text:                   "Ver[" + radioMember.channelBVer1 +", " + radioMember.channelBVer2 +", " + radioMember.channelBVer3 +", " + radioMember.channelBVer4 +", " + radioMember.channelBVer7 +", " + radioMember.channelBVer8 + " ]"
                                     }
                                 }
-
                             }
 
                             Column {
@@ -527,18 +525,14 @@ import QGroundControl.SettingsManager       1.0
                                     }
                                 }
                                 QGCLabel {
-                                    text: !fpvMember.pairStatus ? qsTr("(OK)", "(OK)") : qsTr("(pairing)", "(pairing)")
-                                    color : !fpvMember.pairStatus ? "#0f0" : "#f00"
+                                    visible: fpvMember.pairStatus
+                                    text:  qsTr("(pairing...)", "(pairing...)")
                                 }
                             }
                         }
                     }
-
                 }
-
-
             }
         }
-
     }
 }

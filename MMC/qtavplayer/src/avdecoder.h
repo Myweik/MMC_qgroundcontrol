@@ -80,6 +80,7 @@ public :
     void saveTs(bool status = false);
     void saveImage();
 
+    static void msleep(unsigned int msec);
 protected:
     void init();
     void init2();

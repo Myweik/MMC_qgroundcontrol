@@ -207,7 +207,7 @@ void UsbExample::read(QByteArray *buf)
 
 void UsbExample::write(QByteArray *buf)
 {
-    qDebug() << "Writing" << *buf << buf->size();
+//    qDebug() << "Writing" << *buf << buf->size();
     if (m_transfer_handler->write(buf->constData(), buf->size()) < 0) {
         qWarning("write failed");
     }
@@ -224,7 +224,7 @@ void UsbExample::configRead(QByteArray *buf)
 
 void UsbExample::configWrite(QByteArray *buf)
 {
-    qDebug() << "Writing" << *buf << buf->size();
+//    qDebug() << "Writing" << *buf << buf->size();
     if (m_config_handler->write(buf->constData(), buf->size()) < 0) {
         qWarning("write failed");
     }

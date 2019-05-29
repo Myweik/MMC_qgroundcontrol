@@ -8,6 +8,7 @@
 #include <QDir>
 
 #include <QProcess>
+#include <QCoreApplication>
 
 #include "painter/GlPainter.h"
 
@@ -164,7 +165,6 @@ AVDecoder::~AVDecoder()
         delete renderq;
         renderq =nullptr;
     }
-
 }
 
 void AVDecoder::setMediaCallback(AVMediaCallback *media){
@@ -498,14 +498,23 @@ void AVDecoder::init(){
     }
 }
 
+void AVDecoder::msleep(unsigned int msec)
+{
+    QTime dieTime = QTime::currentTime().addMSecs(msec);
+    while (QTime::currentTime() < dieTime) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 1);
+    }
+}
+
 static int readRawDataCB(void *opaque, uint8_t *buf, int buf_size)
 {
-    (void)opaque; (void)buf_size;
+    (void)buf_size;
+    AVDecoder* decoder = (AVDecoder*)opaque;
     int len = -1;
     while(len < 1)
     {
         len = g_fifo->read(buf);
-        QThread::usleep(100);
+        decoder->msleep(1);
     }
     return (-1 == len)?AVERROR(errno) :len;
 }
