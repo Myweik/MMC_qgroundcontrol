@@ -1288,3 +1288,5 @@ include(QGCInstaller.pri)
 #
 
 include(MMC/MMC.pri)
+
+

@@ -192,7 +192,9 @@ import QGroundControl.SettingsManager       1.0
                                 Row{
                                     visible:            true
                                     spacing:  20
+                                    ExclusiveGroup { id: fenceActionRadioGroup }
                                     QGCRadioButton {
+                                        exclusiveGroup:     fenceActionRadioGroup
                                         text:               qsTr("Left Model", "左手模式")
                                         checked:            radioMember.rcMode === 0x05
                                         onClicked: {
@@ -203,6 +205,7 @@ import QGroundControl.SettingsManager       1.0
                                     }
 
                                     QGCRadioButton {
+                                        exclusiveGroup:     fenceActionRadioGroup
                                         text:               qsTr("Right Model", "右手模式")
                                         checked:            radioMember.rcMode === 0x0A
                                         onClicked: {
