@@ -54,6 +54,7 @@ UsbExample::UsbExample(QObject *parent)
 
         addReadTask();
         _readConfigTimer->start(150);
+        setOSD(true);
     } else {
         qWarning("Could not open device!");
     }
@@ -242,6 +243,19 @@ void UsbExample::getConfig()
 {
     char buff[10] = {0xFF, 0x5A, 0x19, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00};
     QByteArray buf(buff, 10);
+    if(m_config_handler)
+        this->configWrite(&buf);
+}
+
+void UsbExample::setOSD(bool state)
+{
+    char buff[11] = {0xFF, 0x5A, 0x11, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01};
+    if(!state){
+        buff[10] = 0x00;
+        buff[8]  = 0x00;
+    }
+
+    QByteArray buf(buff, 11);
     if(m_config_handler)
         this->configWrite(&buf);
 }

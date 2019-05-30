@@ -496,7 +496,7 @@ import QGroundControl.SettingsManager       1.0
                         anchors.margins:            ScreenTools.defaultFontPixelWidth
                         anchors.horizontalCenter:   parent.horizontalCenter
                         QGCLabel {
-                            text:           qsTr("General2")
+                            text:           qsTr("GT Config")
                             font.family:    ScreenTools.demiboldFontFamily
                         }
                     }
@@ -515,6 +515,7 @@ import QGroundControl.SettingsManager       1.0
                             anchors.centerIn:   parent
 
                             Row{
+                                anchors.horizontalCenter:   parent.horizontalCenter
                                 spacing:  10
                                 QGCButton {
                                     text: qsTr("pair", "pair")
@@ -527,6 +528,18 @@ import QGroundControl.SettingsManager       1.0
                                 QGCLabel {
                                     visible: fpvMember.pairStatus
                                     text:  qsTr("(pairing...)", "(pairing...)")
+                                }
+                            }
+
+                            Row{
+                                anchors.horizontalCenter:   parent.horizontalCenter
+                                spacing:  30
+                                QGCLabel {
+                                    text: fpvMember.RC === 0 ? qsTr("(RC:---)") : qsTr("(RC:") + fpvMember.RC + ")"
+                                }
+
+                                QGCLabel {
+                                    text: fpvMember.VT === 0  ? qsTr("(VT:---)") : qsTr("(VT:") + fpvMember.VT + ")"
                                 }
                             }
                         }

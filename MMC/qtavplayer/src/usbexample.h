@@ -54,6 +54,7 @@ public:
 
     void setConfig();
     void getConfig();
+    void setOSD(bool state = true);
 
     void addReadTask();
     void addReadyReadTask();
