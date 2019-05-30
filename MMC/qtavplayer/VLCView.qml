@@ -7,7 +7,7 @@ import QtQuick 2.0
 import VLCQt 1.1
 import QtMultimedia 5.5
 //import MMCSettings  1.0
-//import QGroundControl               1.0
+import QGroundControl               1.0
 //import QGroundControl.Controls      1.0
 
 Rectangle {
@@ -31,6 +31,12 @@ Rectangle {
 //            vidEncoder.url = videoSource
 //        }
 //    }
+    MouseArea {
+        anchors.fill: parent
+        onDoubleClicked: {
+            QGroundControl.videoManager.fullScreen = !QGroundControl.videoManager.fullScreen
+        }
+    }
 
     VlcVideoPlayer {
         id: vidEncoder
