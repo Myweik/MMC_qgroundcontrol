@@ -10,12 +10,14 @@ AndroidRaduiMember::AndroidRaduiMember(QObject *parent)
 void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
 {
     uchar* buff = (uchar*)msg.data();
+    int len = msg.length();
     ushort tep = 0;
     float tmp;
     if(type == 0x04)
     qDebug() << "---------------------- AndroidRaduiMember::analysisPack" << type << msg.toHex();
     switch (type) {
     case 0x01:{  //心跳
+        if(len != 16) break;
         this->set_chargeState(*buff++);
         this->set_voltage(*buff++);
         this->set_energy(*buff++);
@@ -32,6 +34,7 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
         break;
     }
     case 0x03: { //遥控器各通道 -- 16字节
+        if(len != 32) break;
         memcpy(&tep, buff, sizeof(ushort));
         this->set_channel1(tep);
         buff += 2;
@@ -83,10 +86,12 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
         break;
         }
     case 0x04:{  //遥控器校准时各通道值
+        if(len != 1) break;
         this->set_checkStatus(*buff++);
         break;
     }
     case 0x05:{  //遥控器校准时各通道值
+        if(len != 48) break;
         memcpy(&tep, buff, sizeof(ushort));
         this->set_channelBMid1(tep);
         buff += 2;
@@ -165,7 +170,7 @@ void AndroidRaduiMember::analysisPack(int type, QByteArray msg)
         break;
     }
     case 0x08:{  //单片机唯一ID
-        this->setRadioID(QByteArray((char*)buff, 12));
+//        this->setRadioID(QByteArray((char*)buff, 12));
         break;
     }
     default:

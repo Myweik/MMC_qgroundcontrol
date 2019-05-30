@@ -535,11 +535,11 @@ import QGroundControl.SettingsManager       1.0
                                 anchors.horizontalCenter:   parent.horizontalCenter
                                 spacing:  30
                                 QGCLabel {
-                                    text: fpvMember.RC === 0 ? qsTr("(RC:---)") : qsTr("(RC:") + fpvMember.RC + ")"
+                                    text: fpvMember.RC === 0 ? qsTr("(RC:---)") : qsTr("(RC:") + fpvMember.RC + "%)"
                                 }
 
                                 QGCLabel {
-                                    text: fpvMember.VT === 0  ? qsTr("(VT:---)") : qsTr("(VT:") + fpvMember.VT + ")"
+                                    text: fpvMember.VT === 0  ? qsTr("(VT:---)") : qsTr("(VT:") + fpvMember.VT + "%)"
                                 }
                             }
                         }
