@@ -2756,6 +2756,10 @@ void Vehicle::_linkActiveChanged(LinkInterface *link, bool active, int vehicleID
             communicationRegained = true;
             emit connectionLostChanged(false);
 
+            //send init Vehicle  _ By_mw 20190305
+             _firmwarePlugin->initializeVehicle(this);
+             _parameterManager->refreshAllParameters(); // get parameters  //requestDataStream
+
             if (_priorityLink->highLatency()) {
                 _setMaxProtoVersion(100);
             } else {
