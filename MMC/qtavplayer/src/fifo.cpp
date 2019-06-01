@@ -21,6 +21,10 @@ void usbfifo::write(unsigned char *buf, int length)
 //    qDebug() << "-------------------------usbfifo::write" << length << _buffQurue->size();
 
     while (length != 0) {
+        if(_buffQurue->size() > 30){
+            clear();
+        }
+
         QByteArray* buff = new QByteArray;
         if(length > 102400){
             buff->resize(102400);

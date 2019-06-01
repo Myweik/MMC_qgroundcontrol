@@ -69,7 +69,7 @@ Item {
             currentPopUp.close()
         }
         //-- In settings view, the full height is available. Set to 0 so it is ignored.
-        ScreenTools.availableHeight = 0
+//        ScreenTools.availableHeight = 0
         hideAllViews()
         if (settingsViewLoader.source != _settingsViewSource) {
             settingsViewLoader.source  = _settingsViewSource
@@ -85,7 +85,7 @@ Item {
             currentPopUp.close()
         }
         //-- In setup view, the full height is available. Set to 0 so it is ignored.
-        ScreenTools.availableHeight = 0
+//        ScreenTools.availableHeight = 0
         hideAllViews()
         if (setupViewLoader.source  != _setupViewSource) {
             setupViewLoader.source  = _setupViewSource
@@ -127,7 +127,7 @@ Item {
         if(currentPopUp) {
             currentPopUp.close()
         }
-        ScreenTools.availableHeight = 0
+//        ScreenTools.availableHeight = 0
         if (analyzeViewLoader.source  != _analyzeViewSource) {
             analyzeViewLoader.source  = _analyzeViewSource
         }
