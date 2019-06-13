@@ -78,7 +78,7 @@ void UsbExample::setupDevice()
    */
     qDebug() << "setupDevice";
 
-    m_usb_dev->setLogLevel(QUsbDevice::logDebug /*logNone*/);
+    m_usb_dev->setLogLevel(QUsbDevice::logNone);
 
     // desc.idProduct == 0xAA97 && desc.idVendor == 0xAAAA
     m_filter.pid = 0xAA97;
