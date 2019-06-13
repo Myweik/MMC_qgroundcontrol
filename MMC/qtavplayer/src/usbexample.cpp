@@ -7,8 +7,14 @@
 
 #include <QDateTime>
 
-usbfifo *g_fifo = nullptr;
-QMutex usb_byte_fifo_mutex;
+#include <QUsbDevice>
+#include <QUsbTransfer>
+
+extern usbfifo *g_fifo;
+extern QMutex usb_byte_fifo_mutex;
+
+QUsbDevice::Id m_filter;
+QUsbDevice::Config m_config;
 
 void UsbExampleTask::run()
 {
@@ -28,8 +34,7 @@ void UsbExampleTask::run()
 //-----------------------------------------------------------------------------
 // Singleton
 static UsbExample* usbExample = NULL;
-UsbExample*
-getUsbExample()
+UsbExample *getUsbExample()
 {
     if(!usbExample)
         usbExample = new UsbExample();
@@ -73,7 +78,7 @@ void UsbExample::setupDevice()
    */
     qDebug() << "setupDevice";
 
-    m_usb_dev->setLogLevel(QUsbDevice::logNone);
+    m_usb_dev->setLogLevel(QUsbDevice::logDebug /*logNone*/);
 
     // desc.idProduct == 0xAA97 && desc.idVendor == 0xAAAA
     m_filter.pid = 0xAA97;

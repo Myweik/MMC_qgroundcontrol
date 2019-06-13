@@ -10,19 +10,12 @@
 #include <QDebug>
 #include <QQueue>
 
-#include "usbexample.h"
+#if defined(Q_OS_WIN32)
+    #include "../libusb0/libusb.h"
+#else
+    #include "usbexample.h"
+#endif
 #include "fifo.h"
-//#include <QVideoFrame>
-
-//extern "C"
-//{
-//#include "libavcodec/avcodec.h"
-//#include "libavformat/avformat.h"
-//#include "libswscale/swscale.h"
-//#include "libavutil/imgutils.h"
-//#include <libavformat/avio.h>
-//#include <libavutil/file.h>
-//}
 
 extern "C"
 {
@@ -97,7 +90,12 @@ signals:
     void senderEncodecStatus(bool);
 private:
     usbfifo                 *_usbfifo = nullptr;
+#if defined(Q_OS_WIN32)
+    LibUsb              *_hidUSB = nullptr;
+#else
     UsbExample              *_hidUSB = nullptr;
+#endif
+
 
 //    qint64 lastReadPacktTime = 0;
 //    int timeout = 5000;
@@ -149,7 +147,9 @@ private:
     QReadWriteLock mVideoCodecCtxMutex;
 
     //  ----- HW
-//    QList<AVCodecHWConfig *> mHWConfigList;
+#if defined(Q_OS_WIN32)
+      QList<AVCodecHWConfig *> mHWConfigList;
+#endif
     bool                     mUseHw = false;
     /** 硬解格式 */
     enum AVPixelFormat mHWPixFormat;

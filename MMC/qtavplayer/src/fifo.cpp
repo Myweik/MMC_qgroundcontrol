@@ -1,6 +1,10 @@
 //#include "stdafx.h"
 #include "fifo.h"
 #include <QDebug>
+
+usbfifo *g_fifo = nullptr;
+QMutex usb_byte_fifo_mutex;
+
 usbfifo::usbfifo(void)
 {
     _buffQurue  = new BuffQueue;

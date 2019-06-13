@@ -2,18 +2,18 @@
 #define USBEXAMPLE_H
 
 #include <QObject>
-#include <QUsbDevice>
-#include <QUsbTransfer>
 
 #include <QMutex>
 #include <QTimer>
 #include "AVThread.h"
 
-const QUsbDevice::Endpoint USB_PIPE_IN = 0x86; /* Bulk output endpoint for responses */
-const QUsbDevice::Endpoint USB_PIPE_OUT = 0x01; /* Bulk input endpoint for commands */
-const quint16 USB_TIMEOUT_MSEC = 300;
+//const QUsbDevice::Endpoint USB_PIPE_IN = 0x86; /* Bulk output endpoint for responses */
+//const QUsbDevice::Endpoint USB_PIPE_OUT = 0x01; /* Bulk input endpoint for commands */
+//const quint16 USB_TIMEOUT_MSEC = 300;
 
 class UsbExample;
+class QUsbTransfer;
+class QUsbDevice;
 
 class UsbExampleTask : public Task{
 public :
@@ -81,17 +81,14 @@ private:
     QUsbTransfer *m_config_handler; //config
     QByteArray m_send, m_recv;
     QMutex m_recvMutex;
-    QUsbDevice::Id m_filter;
-    QUsbDevice::Config m_config;
-    QUsbDevice::Endpoint m_read_ep, m_write_ep;
+    /*QUsbDevice::Endpoint*/quint8  m_read_ep, m_write_ep;
 
     AVThread mReadUsbThread;
     AVThread mReadyReadThread;
 
     QTimer* _readConfigTimer = nullptr;
 };
-//extern HidThread *hidThread;
-extern QMutex usb_byte_fifo_mutex;
+
 extern UsbExample*    getUsbExample();
 
 #endif // USBEXAMPLE_H

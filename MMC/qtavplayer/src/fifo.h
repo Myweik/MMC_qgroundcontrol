@@ -31,6 +31,8 @@ using namespace std;
 //memcpy(handler->m_read_buf.data() + previous_size, transfer->buffer, static_cast<ulong>(received));
 //handler->m_read_buf_mutex.unlock();
 
+
+
 class BuffQueue{
 public :
     BuffQueue(){init();}
@@ -107,5 +109,6 @@ protected:
 	void run();
 };
 extern usbfifo *g_fifo;
+extern QMutex usb_byte_fifo_mutex;
 
 #endif //FIFO_H
