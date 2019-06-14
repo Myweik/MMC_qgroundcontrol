@@ -44,28 +44,26 @@ void HidThread::addReadyReadTask()
         mReadyReadThread.addTask(new UsbHidTask(this,UsbHidTask::UsbHidTaskCommand_ReadyRead));
 }
 
+//void HidThread::run()
+//{
+//	while(1)
+//	{
+//        if (VIDEODEV ==NULL || COMMONDEV == NULL)
+//		{
+//			QThread::msleep(100);
+//			continue;
+//		}
+//        static bool flag = false;
+//        if(!flag){
+//            flag = setOSD(true);
+//        }
 
+//        readVideo(100);
 
-void HidThread::run()
-{
-	while(1)
-	{
-        if (VIDEODEV ==NULL || COMMONDEV == NULL)
-		{
-			QThread::msleep(100);
-			continue;
-		}
-        static bool flag = false;
-        if(!flag){
-            flag = setOSD();
-        }
-
-        readVideo(100);
-
-//        readData(1);
-        QThread::usleep(1);
-    }
-}
+////        readData(1);
+//        QThread::usleep(1);
+//    }
+//}
 
 void HidThread::readVideo(int timeout)
 {
@@ -88,17 +86,23 @@ void HidThread::readData(int timeout)
     addReadyReadTask();
     if(COMMONDEV == NULL)
         return;
+
     static unsigned char buff[BUF_SIZE_HID*8];
     int res  = transfer_bulk_async(COMMONDEV, EP_IN3, (char*)buff, sizeof(buff), timeout);
     if (res > 0)
     {
         sendReadData(QByteArray((char*)buff, res));
-//        qDebug() <<" ----------HidThread::run() 2" << res << QByteArray((char*)buf, res).toHex();
+//        qDebug() <<" ----------HidThread::run() 2" << res << QByteArray((char*)buff, res).toHex();
     }
 }
 
 bool HidThread::getConfig()
 {
+    static bool flag = false;
+    if(!flag){
+        flag = setOSD(true);
+    }
+
     char buff[10] = {0xFF, 0x5A, 0x19, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00};
     int res = write((char*)buff, 10);
     return res > 0;

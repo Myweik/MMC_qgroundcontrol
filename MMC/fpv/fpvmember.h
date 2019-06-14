@@ -3,8 +3,13 @@
 
 #include <QObject>
 //#include "fpvdatamutual.h"
-#include "../qtavplayer/src/usbexample.h"
 #include "QGC.h"
+
+#if defined(Q_OS_WIN32)
+    class LibUsb;
+#else
+    class UsbExample;
+#endif
 
 class FpvMember : public QObject
 {
@@ -24,7 +29,12 @@ public slots:
 
 private:
 //    fpvDataMutual* _fpvSerial;
+#if defined(Q_OS_WIN32)
+    LibUsb*      _hidUSB = nullptr;
+#else
     UsbExample*      _hidUSB = nullptr;
+#endif
+
 };
 
 #endif // FPVMEMBER_H

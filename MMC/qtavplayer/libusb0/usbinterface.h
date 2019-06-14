@@ -53,7 +53,7 @@ signals:
 	
 
 protected:
-	void run();
+//	void run();
 
     void readVideo(int timeout = 1000);
     void readData(int timeout = 10);

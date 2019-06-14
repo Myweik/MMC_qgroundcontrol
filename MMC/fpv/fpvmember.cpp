@@ -1,19 +1,30 @@
 #include "fpvmember.h"
 #include <math.h>
 
-FpvMember::FpvMember(QObject *parent) : QObject(parent)
+#if defined(Q_OS_WIN32)
+    #include "../../libusb0/libusb.h"
+#else
+    "../qtavplayer/src/usbexample.h"
+#endif
+
+FpvMember::FpvMember(QObject *parent)
+    : QObject(parent)
+    , _VT(0)
+    , _RC(0)
 {
 #if defined(Q_OS_ANDROID) //"ttysWK1"
 //    _fpvSerial = new fpvDataMutual("ttysWK3");
     _hidUSB = getUsbExample();
     connect(_hidUSB, &UsbExample::sendConfigData, this, &FpvMember::onReadyReadData);
 #elif defined(Q_OS_LINUX) || defined(Q_OS_WIN32)
-
+    _hidUSB = getUsbExample();
+    connect(_hidUSB, &LibUsb::sendConfigData, this, &FpvMember::onReadyReadData);
 #endif
 }
 
 void FpvMember::onReadyReadData(QByteArray array)
 {
+//    qDebug() << "=--------------------" << array.toHex();
     char buff[4] = {0xFF, 0x5A, 0x19, 0x00};
     char buff2[4] = {0xFF, 0x5A, 0x11, 0x00};
     if(array.size() ==  (42 + 10) && array.contains(QByteArray(buff, 4))){
