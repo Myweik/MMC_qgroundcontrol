@@ -93,8 +93,7 @@ void RadioProvider::openSerialSlot()
             i = 0;
         }
         if(i == 0) {  //缩小串口范围
-            QList<QGCSerialPortInfo> portListTmp = portList;
-            portList.clear();
+            QList<QGCSerialPortInfo> portListTmp = portList;            portList.clear();
             for(int j = 0; j < portListTmp.count(); j++){
                 if(portListTmp.at(j).description().contains("CP210x") /*&& portListTmp.at(j).isBusy()*/)
                     portList.append(portListTmp.at(j));

@@ -153,7 +153,7 @@ QVariantList &QGCCorePlugin::settingsPages()
         _p->pConsole = new QmlComponentInfo(tr("Console"),
             QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/AppMessages.qml"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pConsole)));
-        _p->pMockLink = new QmlComponentInfo(tr("Radui Member"),
+        _p->pMockLink = new QmlComponentInfo(tr("Radio Member"),
             QUrl::fromUserInput("qrc:/transceiver/AndroidRadioSettingUrl.qml"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pMockLink)));
         _p->pHelp = new QmlComponentInfo(tr("Help"),

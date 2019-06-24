@@ -30,7 +30,7 @@ RESOURCES += \
 
 unix{
     # Android and iOS don't unclude these
-LIBS += -L$$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/ -lavcodec -lavfilter -lavformat -lavutil  -lswresample  -lswscale
+LIBS += -L$$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/ -lavcodec -lavfilter -lavformat -lavutil -lswscale -lswresample
 #-lavdevice -lpostproc
 INCLUDEPATH += $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/include
 
@@ -42,7 +42,7 @@ INCLUDEPATH += $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/include
         $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavutil.so \
         $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavformat.so \
         $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswresample.so \
-        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale.so \
+        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale.so
 
 #        $$PWD/libs/android/libusb-1.0.22/android/libs/armeabi-v7a/libusb1.0.so\
 #        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavcodec-57.so \

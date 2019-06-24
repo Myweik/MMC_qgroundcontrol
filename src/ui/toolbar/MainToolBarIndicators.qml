@@ -124,13 +124,13 @@ Item {
         spacing:            ScreenTools.defaultFontPixelWidth
         visible:            _communicationLost
 
-        QGCButton {
-            id:                     disconnectButton
-            anchors.verticalCenter: parent.verticalCenter
-            text:                   qsTr("Disconnect")
-            primary:                true
-            onClicked:              _activeVehicle.disconnectInactiveVehicle()
-        }
+//        QGCButton {
+//            id:                     disconnectButton
+//            anchors.verticalCenter: parent.verticalCenter
+//            text:                   qsTr("Disconnect")
+//            primary:                true
+//            onClicked:              _activeVehicle.disconnectInactiveVehicle()
+//        }
 
         QGCLabel {
             id:                     connectionLost

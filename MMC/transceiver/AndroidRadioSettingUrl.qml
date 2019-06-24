@@ -27,9 +27,9 @@ import QGroundControl.Palette               1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.SettingsManager       1.0
 
-/*QGCView*/Rectangle {
+QGCView /*Rectangle*/ {
     id:                 _qgcView
-    //    viewPanel:          panel
+    viewPanel:          panel
     color:              qgcPal.window
     anchors.fill:       parent
     anchors.margins:    ScreenTools.defaultFontPixelWidth
@@ -45,6 +45,8 @@ import QGroundControl.SettingsManager       1.0
 
     property var radioMember: QGroundControl.transceiverManager.radioMember
     property var fpvMember: QGroundControl.transceiverManager.fpvMember
+
+    property bool vehicleArmed:                 _activeVehicle ? _activeVehicle.armed : false
 
     QGCPalette { id: qgcPal }
 
@@ -125,9 +127,10 @@ import QGroundControl.SettingsManager       1.0
         }
     }
 
-    Item {
+    QGCViewPanel {
         id:             panel
         anchors.fill:   parent
+
         QGCFlickable {
             clip:               true
             anchors.fill:       parent
@@ -135,9 +138,8 @@ import QGroundControl.SettingsManager       1.0
             contentWidth:       settingsColumn.width
 
             Column{
-
+                id:                 settingsColumn
                 Column {
-                    id:                 settingsColumn
                     width:              _qgcView.width
                     spacing:            ScreenTools.defaultFontPixelHeight * 0.5
                     anchors.margins:    ScreenTools.defaultFontPixelWidth
@@ -217,6 +219,7 @@ import QGroundControl.SettingsManager       1.0
                                 }
 
                                 Column {
+                                    visible: !vehicleArmed
                                     Row{
                                         spacing:  10
                                         visible: 6 <= radioMember.checkStatus || radioMember.checkStatus <= 1
@@ -253,8 +256,12 @@ import QGroundControl.SettingsManager       1.0
                                             radioMember.sendCheckStatus()
                                         }
                                     }
-                                    QGCLabel { visible: radioMember.checkStatus === 2;   text: qsTr("Keep the rocker relatively banned. When Mid remains unchanged, click Next", "请保持摇杆相对禁止，当Mid不变时，点击下一步")}
-                                    QGCLabel { visible: radioMember.checkStatus === 4;   text: qsTr("Turn the rocker to the maximum limit. When Min and Max remain unchanged, click Next.", "请最大限制的拨动摇杆，当Min、max不变时，点击下一步") }
+                                    QGCLabel { visible: radioMember.checkStatus === 2;   text: qsTr("Keep the rocker relatively banned.
+        When Mid remains unchanged, click Next", "请保持摇杆相对禁止，
+        当Mid不变时，点击下一步")}
+                                    QGCLabel { visible: radioMember.checkStatus === 4;   text: qsTr("Turn the rocker to the maximum limit.
+        When Min and Max remain unchanged, click Next.", "请最大限制的拨动摇杆，
+        当Min、max不变时，点击下一步") }
                                     QGCLabel { visible: radioMember.checkStatus === 255; text: qsTr("Calibration failed", "校准失败") }
                                     QGCLabel { visible: radioMember.checkStatus === 6;   text: qsTr("Calibration completed", "校准完成") }
                                 }
@@ -486,7 +493,6 @@ import QGroundControl.SettingsManager       1.0
                     }
                 }
 
-
                 Column {
                     width:              _qgcView.width
                     spacing:            ScreenTools.defaultFontPixelHeight * 0.5
@@ -518,6 +524,7 @@ import QGroundControl.SettingsManager       1.0
                             anchors.centerIn:   parent
 
                             Row{
+                                visible: !vehicleArmed
                                 anchors.horizontalCenter:   parent.horizontalCenter
                                 spacing:  10
                                 QGCButton {
@@ -549,6 +556,8 @@ import QGroundControl.SettingsManager       1.0
                     }
                 }
             }
-        }
-    }
+
+        } // QGCFlickable
+    } // QGCViewPanel
+
 }

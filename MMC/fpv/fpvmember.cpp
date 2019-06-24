@@ -4,7 +4,7 @@
 #if defined(Q_OS_WIN32)
     #include "../../libusb0/libusb.h"
 #else
-    "../qtavplayer/src/usbexample.h"
+    #include "../qtavplayer/src/usbexample.h"
 #endif
 
 FpvMember::FpvMember(QObject *parent)
