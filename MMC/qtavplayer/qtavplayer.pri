@@ -42,19 +42,9 @@ INCLUDEPATH += $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/include
         $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavutil.so \
         $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavformat.so \
         $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswresample.so \
-        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale.so
-
-#        $$PWD/libs/android/libusb-1.0.22/android/libs/armeabi-v7a/libusb1.0.so\
-#        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavcodec-57.so \
-#$$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavdevice-57.so \
-#        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavfilter-6.so \
-#        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavutil-55.so \
-#        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavformat-57.so \
-#$$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libpostproc-54.so \
-#        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswresample-2.so \
-#        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale-4.so \
-#        $$PWD/libs/android/openssl/libcrypto.so \
-#        $$PWD/libs/android/openssl/libssl.so \
+        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale.so \
+        $$PWD/libs/android/openssl/libssl.so \
+        $$PWD/libs/android/openssl/libcrypto.so \
 #        $$PWD/libs/android/openssl/libcrypto.so.1.0.0 \
 #        $$PWD/libs/android/openssl/libssl.so.1.0.0 \
     }
