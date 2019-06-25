@@ -34,22 +34,22 @@ LIBS += -L$$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/ -lav
 #-lavdevice -lpostproc
 INCLUDEPATH += $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/include
 
- contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_EXTRA_LIBS = \
-        $$PWD/libs/android/libusb-1.0.22/android/libs/armeabi-v7a/libusb1.0.so\
-        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavcodec.so \
-        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavfilter.so \
-        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavutil.so \
-        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavformat.so \
-        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswresample.so \
-        $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale.so \
-        $$PWD/libs/android/openssl/libssl.so \
-        $$PWD/libs/android/openssl/libcrypto.so \
-#        $$PWD/libs/android/openssl/libcrypto.so.1.0.0 \
-#        $$PWD/libs/android/openssl/libssl.so.1.0.0 \
+
+AndroidBuild {
+    contains(QT_ARCH, arm) {
+        ANDROID_EXTRA_LIBS += \
+            $$PWD/libs/android/libusb-1.0.22/android/libs/armeabi-v7a/libusb1.0.so\
+            $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavcodec.so \
+            $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavfilter.so \
+            $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavutil.so \
+            $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libavformat.so \
+            $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswresample.so \
+            $$PWD/libs/android/ffmpeg-4.0.2-android-gcc-lite/lib/armeabi-v7a/libswscale.so \
+        }
+    } else {
+
     }
 }
-
 
 win32 {
 LIBS += -L$$PWD/libs/lib/win32/ -lavcodec -lavfilter -lavformat -lavutil -lswresample -lswscale
@@ -57,4 +57,3 @@ INCLUDEPATH += $$PWD/libs/include
 DEPENDPATH += $$PWD/libs/include
 include(libusb0/libusb0.pri)
 }
-
