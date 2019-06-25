@@ -69,7 +69,7 @@ moc_*
 ui_*
 *.o
 *.a
-*.so*
+#*.so*
 *.moc
 *.prl
 
