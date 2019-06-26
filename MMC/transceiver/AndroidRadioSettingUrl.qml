@@ -46,6 +46,7 @@ QGCView /*Rectangle*/ {
     property var radioMember: QGroundControl.transceiverManager.radioMember
     property var fpvMember: QGroundControl.transceiverManager.fpvMember
 
+    property var  _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property bool vehicleArmed:                 _activeVehicle ? _activeVehicle.armed : false
 
     QGCPalette { id: qgcPal }
@@ -192,7 +193,7 @@ QGCView /*Rectangle*/ {
                                 QGCLabel { text: radioMember.verComment + ": " +  radioMember.ver }
 
                                 Row{
-                                    visible:            true
+                                    visible:  !vehicleArmed
                                     spacing:  20
                                     ExclusiveGroup { id: fenceActionRadioGroup }
                                     QGCRadioButton {
