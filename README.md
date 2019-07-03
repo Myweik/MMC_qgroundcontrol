@@ -1,3 +1,6 @@
+# QTUSB
+http://192.168.5.3/MengWei/QTUSB.git
+
 # QGroundControl
 https://github.com/mavlink/qgroundcontrol.git
 
